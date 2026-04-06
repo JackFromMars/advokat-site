@@ -6,21 +6,21 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-white/10 bg-slate-950">
+    <footer className="border-t border-[var(--color-border)] bg-[var(--color-bg-deep)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-lg font-bold gold-gradient mb-4">
+            <h3 className="font-heading text-lg font-bold gold-gradient mb-4">
               Адвокат Левченко Н.В.
             </h3>
-            <p className="text-slate-400 text-sm leading-relaxed">
+            <p className="text-[var(--color-muted)] text-sm leading-relaxed">
               Професійний захист ваших інтересів з 2003 року. Сімейні справи,
               житлові суперечки, мобілізація.
             </p>
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-white mb-4 uppercase tracking-wider">
+            <h4 className="font-heading text-sm font-semibold text-[var(--color-foreground)] mb-4 uppercase tracking-wider">
               Послуги
             </h4>
             <ul className="space-y-2">
@@ -28,7 +28,7 @@ export default function Footer() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-sm text-slate-400 hover:text-white transition-colors"
+                    className="text-sm text-[var(--color-muted)] hover:text-[var(--color-foreground)] transition-colors duration-200 cursor-pointer"
                   >
                     {item.label}
                   </Link>
@@ -38,14 +38,14 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-white mb-4 uppercase tracking-wider">
+            <h4 className="font-heading text-sm font-semibold text-[var(--color-foreground)] mb-4 uppercase tracking-wider">
               Контакти
             </h4>
-            <ul className="space-y-2 text-sm text-slate-400">
+            <ul className="space-y-2 text-sm text-[var(--color-muted)]">
               <li>
                 <a
                   href={`tel:${contacts.phoneRaw}`}
-                  className="hover:text-white transition-colors"
+                  className="hover:text-[var(--color-foreground)] transition-colors duration-200 cursor-pointer"
                 >
                   {contacts.phone}
                 </a>
@@ -56,7 +56,7 @@ export default function Footer() {
                   href={contacts.messengers.telegram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-[var(--color-foreground)] transition-colors duration-200 cursor-pointer"
                 >
                   Telegram
                 </a>
@@ -64,7 +64,7 @@ export default function Footer() {
                   href={contacts.messengers.viber}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-[var(--color-foreground)] transition-colors duration-200 cursor-pointer"
                 >
                   Viber
                 </a>
@@ -72,7 +72,7 @@ export default function Footer() {
                   href={contacts.messengers.whatsapp}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-[var(--color-foreground)] transition-colors duration-200 cursor-pointer"
                 >
                   WhatsApp
                 </a>
@@ -81,8 +81,8 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-white/10 text-center text-sm text-slate-500">
-          © {currentYear} {contacts.name}. Усі права захищені.
+        <div className="mt-8 pt-8 border-t border-[var(--color-border)] text-center text-sm text-[var(--color-muted)]">
+          &copy; {currentYear} {contacts.name}. Усі права захищені.
         </div>
       </div>
     </footer>
