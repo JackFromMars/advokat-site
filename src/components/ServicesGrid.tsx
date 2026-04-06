@@ -1,12 +1,14 @@
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { primaryServices, secondaryServices } from "@/data/services";
+import ServiceIcon from "@/components/icons/ServiceIcons";
 
 export default function ServicesGrid() {
   return (
-    <section id="services" className="py-16 md:py-20">
+    <section id="services" className="section-bg py-16 md:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-white mb-4">
             Основні <span className="gold-gradient">послуги</span>
           </h2>
           <p className="text-slate-400 max-w-2xl mx-auto">
@@ -19,10 +21,12 @@ export default function ServicesGrid() {
             <Link
               key={service.slug}
               href={`/${service.slug}`}
-              className="glass glass-hover p-6 md:p-8 group"
+              className="glass glass-hover p-6 md:p-8 group cursor-pointer"
             >
-              <div className="text-4xl mb-4">{service.icon}</div>
-              <h3 className="text-xl font-bold text-white mb-3 group-hover:text-amber-400 transition-colors">
+              <div className="icon-container-lg mb-4">
+                <ServiceIcon slug={service.slug} size={28} />
+              </div>
+              <h3 className="font-heading text-xl font-bold text-white mb-3 group-hover:text-amber-400 transition-colors duration-200">
                 {service.title}
               </h3>
               <p className="text-slate-400 text-sm leading-relaxed mb-4">
@@ -34,20 +38,24 @@ export default function ServicesGrid() {
                     key={sub.title}
                     className="text-xs text-slate-500 flex items-start gap-2"
                   >
-                    <span className="text-amber-400/60 mt-0.5">•</span>
+                    <span
+                      className="mt-1.5 flex-shrink-0 w-1.5 h-1.5 rounded-full"
+                      style={{ backgroundColor: "var(--color-accent)" }}
+                    />
                     {sub.title}
                   </li>
                 ))}
               </ul>
-              <div className="mt-4 text-amber-400 text-sm font-medium group-hover:translate-x-1 transition-transform">
-                Детальніше →
+              <div className="mt-4 text-amber-400 text-sm font-medium flex items-center gap-1 group-hover:translate-x-1 transition-transform duration-150">
+                Детальніше
+                <ArrowRight size={14} />
               </div>
             </Link>
           ))}
         </div>
 
         <div className="text-center mb-8">
-          <h3 className="text-xl md:text-2xl font-bold text-white">
+          <h3 className="font-heading text-xl md:text-2xl font-bold text-white">
             Також допоможу з
           </h3>
         </div>
@@ -57,10 +65,12 @@ export default function ServicesGrid() {
             <Link
               key={service.slug}
               href={`/${service.slug}`}
-              className="glass glass-hover p-4 group text-center"
+              className="glass glass-hover p-4 group text-center cursor-pointer"
             >
-              <div className="text-2xl mb-2">{service.icon}</div>
-              <h4 className="text-sm font-semibold text-white group-hover:text-amber-400 transition-colors">
+              <div className="icon-container mb-2 mx-auto">
+                <ServiceIcon slug={service.slug} size={20} />
+              </div>
+              <h4 className="text-sm font-semibold text-white group-hover:text-amber-400 transition-colors duration-200">
                 {service.shortTitle}
               </h4>
             </Link>
