@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ChatWidget from "@/components/ChatWidget";
 import { generateLocalBusinessSchema } from "@/lib/schema";
 
 const inter = Inter({
@@ -44,6 +45,7 @@ export default function RootLayout({
         <Header />
         <main className="pt-16 md:pt-20">{children}</main>
         <Footer />
+        <ChatWidget />
       </body>
     </html>
   );
