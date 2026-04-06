@@ -2,6 +2,11 @@ import { NextResponse } from "next/server";
 import { sendToTelegram } from "@/lib/telegram";
 
 export async function POST(request: Request) {
+  const contentType = request.headers.get("content-type") ?? "";
+  if (!contentType.includes("application/json")) {
+    return NextResponse.json({ error: "Невірний формат запиту" }, { status: 415 });
+  }
+
   try {
     const body = await request.json();
     const { name, phone } = body;
