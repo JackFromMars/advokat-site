@@ -62,6 +62,8 @@ export default function Footer() {
                 </a>
                 <a
                   href={contacts.messengers.viber}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="hover:text-white transition-colors"
                 >
                   Viber
