@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 320" fill="none">
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#D4A843"/>
+      <stop offset="50%" stop-color="#F0D68A"/>
+      <stop offset="100%" stop-color="#D4A843"/>
+    </linearGradient>
+    <linearGradient id="goldDark" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#D4A843"/>
+      <stop offset="100%" stop-color="#A07830"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Scales of Justice -->
+  <g transform="translate(150, 65)">
+    <!-- Center pole -->
+    <rect x="-2" y="-35" width="4" height="70" fill="url(#gold)" rx="2"/>
+    <!-- Top triangle/fulcrum -->
+    <polygon points="-8,-35 8,-35 0,-45" fill="url(#gold)"/>
+    <!-- Beam -->
+    <rect x="-55" y="-33" width="110" height="3" fill="url(#gold)" rx="1.5"/>
+    <!-- Left chain -->
+    <line x1="-50" y1="-30" x2="-50" y2="0" stroke="url(#gold)" stroke-width="2"/>
+    <line x1="-45" y1="-30" x2="-45" y2="0" stroke="url(#gold)" stroke-width="1.5"/>
+    <!-- Right chain -->
+    <line x1="50" y1="-30" x2="50" y2="0" stroke="url(#gold)" stroke-width="2"/>
+    <line x1="45" y1="-30" x2="45" y2="0" stroke="url(#gold)" stroke-width="1.5"/>
+    <!-- Left pan -->
+    <path d="M-60,0 Q-47.5,12 -35,0" stroke="url(#gold)" stroke-width="2.5" fill="none"/>
+    <!-- Right pan -->
+    <path d="M35,0 Q47.5,12 60,0" stroke="url(#gold)" stroke-width="2.5" fill="none"/>
+    <!-- Base -->
+    <rect x="-15" y="35" width="30" height="3" fill="url(#gold)" rx="1.5"/>
+    <rect x="-10" y="38" width="20" height="2" fill="url(#goldDark)" rx="1"/>
+  </g>
+
+  <!-- Monogram ЛН in circle -->
+  <circle cx="150" cy="145" r="28" stroke="url(#gold)" stroke-width="2" fill="none"/>
+  <text x="150" y="153" text-anchor="middle" font-family="Georgia, 'EB Garamond', serif" font-size="22" font-weight="600" fill="url(#gold)">ЛН</text>
+
+  <!-- Laurel wreath - left -->
+  <g transform="translate(150, 155)" opacity="0.9">
+    <!-- Left branch -->
+    <path d="M-30,-55 Q-55,-30 -60,10 Q-58,20 -50,30" stroke="url(#gold)" stroke-width="1.5" fill="none"/>
+    <ellipse cx="-45" cy="-40" rx="6" ry="12" transform="rotate(-30, -45, -40)" fill="none" stroke="url(#gold)" stroke-width="1.2"/>
+    <ellipse cx="-52" cy="-25" rx="6" ry="12" transform="rotate(-15, -52, -25)" fill="none" stroke="url(#gold)" stroke-width="1.2"/>
+    <ellipse cx="-57" cy="-8" rx="6" ry="12" transform="rotate(-5, -57, -8)" fill="none" stroke="url(#gold)" stroke-width="1.2"/>
+    <ellipse cx="-58" cy="10" rx="6" ry="11" transform="rotate(5, -58, 10)" fill="none" stroke="url(#gold)" stroke-width="1.2"/>
+    <ellipse cx="-54" cy="27" rx="5" ry="10" transform="rotate(15, -54, 27)" fill="none" stroke="url(#gold)" stroke-width="1.2"/>
+
+    <!-- Right branch -->
+    <path d="M30,-55 Q55,-30 60,10 Q58,20 50,30" stroke="url(#gold)" stroke-width="1.5" fill="none"/>
+    <ellipse cx="45" cy="-40" rx="6" ry="12" transform="rotate(30, 45, -40)" fill="none" stroke="url(#gold)" stroke-width="1.2"/>
+    <ellipse cx="52" cy="-25" rx="6" ry="12" transform="rotate(15, 52, -25)" fill="none" stroke="url(#gold)" stroke-width="1.2"/>
+    <ellipse cx="57" cy="-8" rx="6" ry="12" transform="rotate(5, 57, -8)" fill="none" stroke="url(#gold)" stroke-width="1.2"/>
+    <ellipse cx="58" cy="10" rx="6" ry="11" transform="rotate(-5, 58, 10)" fill="none" stroke="url(#gold)" stroke-width="1.2"/>
+    <ellipse cx="54" cy="27" rx="5" ry="10" transform="rotate(-15, 54, 27)" fill="none" stroke="url(#gold)" stroke-width="1.2"/>
+  </g>
+
+  <!-- Text: ЛЕВЧЕНКО -->
+  <text x="150" y="235" text-anchor="middle" font-family="Georgia, 'EB Garamond', serif" font-size="28" font-weight="700" letter-spacing="4" fill="url(#gold)">ЛЕВЧЕНКО</text>
+
+  <!-- Text: НАТАЛІЯ -->
+  <text x="150" y="262" text-anchor="middle" font-family="Georgia, 'EB Garamond', serif" font-size="22" font-weight="600" letter-spacing="3" fill="url(#gold)">НАТАЛІЯ</text>
+
+  <!-- Text: АДВОКАТ -->
+  <text x="150" y="290" text-anchor="middle" font-family="Georgia, 'EB Garamond', serif" font-size="14" font-weight="400" letter-spacing="6" fill="url(#gold)" opacity="0.8">АДВОКАТ</text>
+</svg>

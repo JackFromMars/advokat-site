@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { MessageCircle, Smartphone, MessageSquare, Phone, MessageCircleMore, X } from "lucide-react";
+import { MessageCircleMore, X } from "lucide-react";
+import { TelegramIcon, ViberIcon, WhatsAppIcon, PhoneIcon } from "@/components/icons/MessengerIcons";
 import { contacts } from "@/data/contacts";
 
 export default function ChatWidget() {
@@ -11,25 +12,25 @@ export default function ChatWidget() {
     {
       label: "Telegram",
       href: contacts.messengers.telegram,
-      icon: <MessageCircle size={20} className="text-sky-400" />,
+      icon: <TelegramIcon size={20} className="text-sky-400" />,
       color: "hover:bg-sky-500/20",
     },
     {
       label: "Viber",
       href: contacts.messengers.viber,
-      icon: <Smartphone size={20} className="text-purple-400" />,
+      icon: <ViberIcon size={20} className="text-purple-400" />,
       color: "hover:bg-purple-500/20",
     },
     {
       label: "WhatsApp",
       href: contacts.messengers.whatsapp,
-      icon: <MessageSquare size={20} className="text-green-400" />,
+      icon: <WhatsAppIcon size={20} className="text-green-400" />,
       color: "hover:bg-green-500/20",
     },
     {
       label: "Зателефонувати",
       href: `tel:${contacts.phoneRaw}`,
-      icon: <Phone size={20} style={{ color: "var(--color-accent)" }} />,
+      icon: <PhoneIcon size={20} className="text-[var(--color-accent)]" />,
       color: "hover:bg-amber-500/20",
     },
   ];

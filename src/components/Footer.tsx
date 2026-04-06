@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { contacts } from "@/data/contacts";
 import { navigation } from "@/data/navigation";
+import { TelegramIcon, ViberIcon, WhatsAppIcon } from "@/components/icons/MessengerIcons";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -58,7 +59,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="hover:text-[var(--color-foreground)] transition-colors duration-200 cursor-pointer"
                 >
-                  Telegram
+                  <TelegramIcon size={14} className="inline mr-1" /> Telegram
                 </a>
                 <a
                   href={contacts.messengers.viber}
@@ -66,7 +67,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="hover:text-[var(--color-foreground)] transition-colors duration-200 cursor-pointer"
                 >
-                  Viber
+                  <ViberIcon size={14} className="inline mr-1" /> Viber
                 </a>
                 <a
                   href={contacts.messengers.whatsapp}
@@ -74,7 +75,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="hover:text-[var(--color-foreground)] transition-colors duration-200 cursor-pointer"
                 >
-                  WhatsApp
+                  <WhatsAppIcon size={14} className="inline mr-1" /> WhatsApp
                 </a>
               </li>
             </ul>

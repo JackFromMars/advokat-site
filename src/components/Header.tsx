@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X, Phone } from "lucide-react";
 import { navigation } from "@/data/navigation";
 import { contacts } from "@/data/contacts";
@@ -13,13 +14,8 @@ export default function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 glass">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
-          <Link href="/" className="flex flex-col cursor-pointer">
-            <span className="font-heading text-lg md:text-xl font-bold gold-gradient">
-              Адвокат Левченко
-            </span>
-            <span className="text-xs text-[var(--color-muted)] hidden sm:block">
-              Наталія Вікторівна
-            </span>
+          <Link href="/" className="cursor-pointer">
+            <Image src="/images/logo.svg" alt="Адвокат Левченко" width={160} height={50} className="h-10 md:h-12 w-auto" priority />
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">
