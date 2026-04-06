@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   },
   description:
     "Адвокат у Чернівцях з досвідом понад 23 роки. Сімейні справи, житлові суперечки, мобілізація. Професійний захист ваших інтересів.",
-  metadataBase: new URL("https://advokat.jackmars.com.ua"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://advokat.jackmars.com.ua"),
 };
 
 export default function RootLayout({
