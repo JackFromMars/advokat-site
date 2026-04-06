@@ -5,14 +5,14 @@ export default function Map() {
     <section className="py-16 md:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-[var(--color-foreground)] mb-4">
             Як <span className="gold-gradient">знайти</span>
           </h2>
           <a
             href={contacts.googleMapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-slate-400 hover:text-amber-400 transition-colors"
+            className="text-[var(--color-muted)] hover:text-[var(--color-accent)] transition-colors cursor-pointer"
           >
             {contacts.address}
           </a>
