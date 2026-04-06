@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { primaryServices, secondaryServices } from "@/data/services";
@@ -6,8 +7,11 @@ import HighlightCard from "@/components/HighlightCard";
 
 export default function ServicesGrid() {
   return (
-    <section id="services" className="section-bg py-16 md:py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="services" className="py-12 md:py-20 section-bg relative overflow-hidden">
+      <div className="absolute inset-0 opacity-[0.05]">
+        <Image src="/images/services-bg.png" alt="" fill className="object-cover" />
+      </div>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
             Основні <span className="gold-gradient">послуги</span>

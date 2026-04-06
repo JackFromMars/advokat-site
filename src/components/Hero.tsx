@@ -6,18 +6,14 @@ import { Phone } from "lucide-react";
 import { contacts } from "@/data/contacts";
 import ContactForm from "./ContactForm";
 
-const slides = [
-  { bg: "linear-gradient(135deg, #0a0e1a 0%, #1a1a2e 50%, #16213e 100%)" },
-  { bg: "linear-gradient(135deg, #0d1117 0%, #161b22 50%, #0d1117 100%)" },
-  { bg: "linear-gradient(135deg, #1a0a0a 0%, #1a1a2e 50%, #0a0e1a 100%)" },
-];
+const slideImages = ["/images/hero-1.png", "/images/hero-2.png", "/images/hero-3.png"];
 
 export default function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
+      setCurrentSlide((prev) => (prev + 1) % slideImages.length);
     }, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -25,15 +21,21 @@ export default function Hero() {
   return (
     <section className="relative min-h-[85vh] sm:min-h-[90vh] flex items-center overflow-hidden">
       {/* Background slides */}
-      {slides.map((slide, i) => (
+      {slideImages.map((src, i) => (
         <div
           key={i}
           className="absolute inset-0 transition-opacity duration-1000"
-          style={{
-            background: slide.bg,
-            opacity: currentSlide === i ? 1 : 0,
-          }}
-        />
+          style={{ opacity: currentSlide === i ? 1 : 0 }}
+        >
+          <Image
+            src={src}
+            alt=""
+            fill
+            className="object-cover"
+            priority={i === 0}
+            sizes="100vw"
+          />
+        </div>
       ))}
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/50" />
@@ -90,7 +92,7 @@ export default function Hero() {
 
       {/* Dots */}
       <div className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-10 flex gap-2">
-        {slides.map((_, i) => (
+        {slideImages.map((_, i) => (
           <button
             key={i}
             onClick={() => setCurrentSlide(i)}

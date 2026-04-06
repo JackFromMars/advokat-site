@@ -2,6 +2,7 @@ import Image from "next/image";
 import { CheckCircle } from "lucide-react";
 import { contacts } from "@/data/contacts";
 
+
 export default function About() {
   const principles = [
     "Професіоналізм та відповідальність",
@@ -12,8 +13,11 @@ export default function About() {
   ];
 
   return (
-    <section id="about" className="section-bg py-16 md:py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="about" className="py-12 md:py-20 section-bg relative overflow-hidden">
+      <div className="absolute inset-0 opacity-[0.07]">
+        <Image src="/images/about-bg.png" alt="" fill className="object-cover" />
+      </div>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           <div className="glass shadow-[0_0_40px_rgba(30,58,138,0.15)] p-2 md:p-4 max-w-xs sm:max-w-md mx-auto lg:mx-0 order-2 lg:order-1">
             <div className="relative aspect-[3/4] rounded-xl overflow-hidden">
