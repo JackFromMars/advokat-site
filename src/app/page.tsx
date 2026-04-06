@@ -2,13 +2,19 @@ import Hero from "@/components/Hero";
 import Stats from "@/components/Stats";
 import ServicesGrid from "@/components/ServicesGrid";
 import About from "@/components/About";
+import Reviews from "@/components/Reviews";
 import FAQ from "@/components/FAQ";
 import Map from "@/components/Map";
 import ContactForm from "@/components/ContactForm";
 import { generalFAQ } from "@/data/faq";
 import { generateFAQSchema } from "@/lib/schema";
+import { getPlaceReviews } from "@/lib/google-places";
 
-export default function Home() {
+export const revalidate = 86400; // 24 hours
+
+export default async function Home() {
+  const reviews = await getPlaceReviews();
+
   return (
     <>
       <script
@@ -21,6 +27,7 @@ export default function Home() {
       <Stats />
       <ServicesGrid />
       <About />
+      <Reviews data={reviews} />
       <FAQ items={generalFAQ} />
       <Map />
       <section id="contacts" className="py-16 md:py-20">
