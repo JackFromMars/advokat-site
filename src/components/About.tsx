@@ -15,7 +15,7 @@ export default function About() {
     <section id="about" className="section-bg py-16 md:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-          <div className="glass shadow-[0_0_40px_rgba(30,58,138,0.15)] p-2 md:p-4 max-w-md mx-auto lg:mx-0">
+          <div className="glass shadow-[0_0_40px_rgba(30,58,138,0.15)] p-2 md:p-4 max-w-xs sm:max-w-md mx-auto lg:mx-0 order-2 lg:order-1">
             <div className="relative aspect-[3/4] rounded-xl overflow-hidden">
               <Image
                 src="/images/photo.jpg"
@@ -26,11 +26,11 @@ export default function About() {
             </div>
           </div>
 
-          <div>
-            <h2 className="font-heading text-3xl md:text-4xl font-bold text-[var(--color-foreground)] mb-4">
+          <div className="order-1 lg:order-2">
+            <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold text-[var(--color-foreground)] mb-4">
               Про <span className="gold-gradient">адвоката</span>
             </h2>
-            <p className="text-xl text-[var(--color-accent)] font-medium mb-6">
+            <p className="text-lg sm:text-xl text-[var(--color-accent)] font-medium mb-4 sm:mb-6">
               {contacts.name}
             </p>
             <p className="text-[var(--color-muted)] leading-relaxed mb-6">

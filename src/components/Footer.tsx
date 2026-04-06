@@ -52,7 +52,7 @@ export default function Footer() {
                 </a>
               </li>
               <li>{contacts.address}</li>
-              <li className="flex gap-4 pt-2">
+              <li className="flex flex-wrap gap-3 sm:gap-4 pt-2">
                 <a
                   href={contacts.messengers.telegram}
                   target="_blank"

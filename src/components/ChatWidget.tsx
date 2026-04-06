@@ -36,10 +36,10 @@ export default function ChatWidget() {
   ];
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">
       {isOpen && (
         <div
-          className="absolute bottom-16 right-0 glass p-3 mb-2 min-w-[200px] space-y-1"
+          className="absolute bottom-16 right-0 glass p-2 sm:p-3 mb-2 min-w-[180px] sm:min-w-[200px] space-y-1 max-w-[calc(100vw-2rem)]"
           style={{ borderColor: "var(--color-border)" }}
         >
           {channels.map((channel) => (

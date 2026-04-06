@@ -20,11 +20,16 @@
 }
 
 @layer base {
+  html {
+    overflow-x: hidden;
+  }
+
   body {
     background-color: var(--color-bg-deep);
     color: var(--color-foreground);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
 }
 

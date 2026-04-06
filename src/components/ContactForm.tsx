@@ -54,7 +54,7 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className={`bg-[var(--color-glass)] border border-[var(--color-border)] rounded-2xl p-6 space-y-4 ${variant === "hero" ? "max-w-sm" : "max-w-lg mx-auto"}`}
+      className={`bg-[var(--color-glass)] border border-[var(--color-border)] rounded-2xl p-4 sm:p-6 space-y-3 sm:space-y-4 ${variant === "hero" ? "max-w-sm" : "max-w-lg mx-auto"}`}
     >
       <h3 className="font-heading text-lg font-semibold text-white">
         {variant === "hero"

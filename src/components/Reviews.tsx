@@ -30,7 +30,7 @@ export default function Reviews({ data }: ReviewsProps) {
     return (
       <section id="reviews" className="py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-[var(--color-foreground)] mb-4">
+          <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold text-[var(--color-foreground)] mb-4">
             <span className="gold-gradient">Відгуки</span> клієнтів
           </h2>
           <p className="text-[var(--color-muted)] mb-6">
@@ -53,25 +53,25 @@ export default function Reviews({ data }: ReviewsProps) {
     <section id="reviews" className="py-16 md:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-[var(--color-foreground)] mb-4">
+          <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold text-[var(--color-foreground)] mb-4">
             <span className="gold-gradient">Відгуки</span> клієнтів
           </h2>
-          <div className="flex items-center justify-center gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
             <Stars rating={Math.round(data.rating)} />
             <span className="text-[var(--color-foreground)] font-semibold">
               {data.rating}
             </span>
-            <span className="text-[var(--color-muted)]">
+            <span className="text-[var(--color-muted)] text-sm sm:text-base">
               ({data.totalReviews} відгуків у Google)
             </span>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
           {data.reviews.slice(0, 6).map((review, index) => (
             <div
               key={index}
-              className="glass p-6"
+              className="glass p-4 sm:p-6"
               style={{ borderColor: "var(--color-border)" }}
             >
               <div className="flex items-center gap-3 mb-3">

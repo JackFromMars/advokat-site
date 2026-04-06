@@ -8,7 +8,7 @@ export default function ServicesGrid() {
     <section id="services" className="section-bg py-16 md:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
             Основні <span className="gold-gradient">послуги</span>
           </h2>
           <p className="text-slate-400 max-w-2xl mx-auto">
@@ -16,12 +16,12 @@ export default function ServicesGrid() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-8">
           {primaryServices.map((service) => (
             <Link
               key={service.slug}
               href={`/${service.slug}`}
-              className="glass glass-hover p-6 md:p-8 group cursor-pointer"
+              className="glass glass-hover p-5 md:p-8 group cursor-pointer"
             >
               <div className="icon-container-lg mb-4">
                 <ServiceIcon slug={service.slug} size={28} />
@@ -60,12 +60,12 @@ export default function ServicesGrid() {
           </h3>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
           {secondaryServices.map((service) => (
             <Link
               key={service.slug}
               href={`/${service.slug}`}
-              className="glass glass-hover p-4 group text-center cursor-pointer"
+              className="glass glass-hover p-3 md:p-4 group text-center cursor-pointer min-h-[44px]"
             >
               <div className="icon-container mb-2 mx-auto">
                 <ServiceIcon slug={service.slug} size={20} />

@@ -23,7 +23,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-[90vh] flex items-center overflow-hidden">
+    <section className="relative min-h-[85vh] sm:min-h-[90vh] flex items-center overflow-hidden">
       {/* Background slides */}
       {slides.map((slide, i) => (
         <div
@@ -38,7 +38,7 @@ export default function Hero() {
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/50" />
       {/* Glow */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[var(--color-primary)] rounded-full opacity-[0.04] blur-[120px]" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] bg-[var(--color-primary)] rounded-full opacity-[0.04] blur-[120px]" />
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
@@ -47,12 +47,12 @@ export default function Hero() {
             <p className="text-amber-400 font-medium mb-4 text-sm uppercase tracking-wider">
               Адвокат у Чернівцях з 2003 року
             </p>
-            <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
+            <h1 className="font-heading text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4 sm:mb-6">
               Захищу ваші права{" "}
               <span className="gold-gradient">професійно</span> та{" "}
               <span className="gold-gradient">результативно</span>
             </h1>
-            <p className="text-lg text-slate-300 mb-8 leading-relaxed max-w-xl mx-auto lg:mx-0">
+            <p className="text-base sm:text-lg text-slate-300 mb-6 sm:mb-8 leading-relaxed max-w-xl mx-auto lg:mx-0">
               Юридичні проблеми не чекають — і я теж. Від першої консультації до
               рішення суду на вашому боці. Понад 23 роки успішної практики.
             </p>
@@ -89,15 +89,15 @@ export default function Hero() {
       </div>
 
       {/* Dots */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex gap-2">
+      <div className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-10 flex gap-2">
         {slides.map((_, i) => (
           <button
             key={i}
             onClick={() => setCurrentSlide(i)}
-            className={`w-2.5 h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
+            className={`w-2.5 h-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full transition-all duration-300 cursor-pointer before:block before:rounded-full before:transition-all before:duration-300 ${
               currentSlide === i
-                ? "bg-[var(--color-accent)] w-6"
-                : "bg-white/30"
+                ? "before:bg-[var(--color-accent)] before:w-6 before:h-2.5"
+                : "before:bg-white/30 before:w-2.5 before:h-2.5"
             }`}
           />
         ))}
