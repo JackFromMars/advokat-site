@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Check } from "lucide-react";
 
 interface ContactFormProps {
   variant?: "hero" | "section";
@@ -36,8 +37,12 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
 
   if (status === "sent") {
     return (
-      <div className={`glass p-6 text-center ${variant === "hero" ? "max-w-sm" : ""}`}>
-        <div className="text-3xl mb-2">✓</div>
+      <div
+        className={`bg-[var(--color-glass)] border border-[var(--color-border)] rounded-2xl p-6 text-center ${variant === "hero" ? "max-w-sm" : ""}`}
+      >
+        <div className="icon-container mx-auto mb-2">
+          <Check size={20} />
+        </div>
         <p className="text-white font-medium">Дякую за звернення!</p>
         <p className="text-slate-400 text-sm mt-1">
           Зв'яжуся з вами протягом години
@@ -49,9 +54,9 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className={`glass p-6 space-y-4 ${variant === "hero" ? "max-w-sm" : "max-w-lg mx-auto"}`}
+      className={`bg-[var(--color-glass)] border border-[var(--color-border)] rounded-2xl p-6 space-y-4 ${variant === "hero" ? "max-w-sm" : "max-w-lg mx-auto"}`}
     >
-      <h3 className="text-lg font-semibold text-white">
+      <h3 className="font-heading text-lg font-semibold text-white">
         {variant === "hero"
           ? "Безкоштовна консультація"
           : "Залиште заявку — зателефоную протягом години"}
@@ -62,7 +67,7 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
         value={name}
         onChange={(e) => setName(e.target.value)}
         required
-        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400/50 focus:ring-1 focus:ring-amber-400/50 transition-colors"
+        className="w-full px-4 py-3 bg-white/5 border border-[var(--color-border)] rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:border-[var(--color-accent)]/50 focus:ring-1 focus:ring-[var(--color-accent)]/50 transition-colors duration-200"
       />
       <input
         type="tel"
@@ -70,12 +75,12 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
         value={phone}
         onChange={(e) => setPhone(e.target.value)}
         required
-        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400/50 focus:ring-1 focus:ring-amber-400/50 transition-colors"
+        className="w-full px-4 py-3 bg-white/5 border border-[var(--color-border)] rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:border-[var(--color-accent)]/50 focus:ring-1 focus:ring-[var(--color-accent)]/50 transition-colors duration-200"
       />
       <button
         type="submit"
         disabled={status === "sending"}
-        className="w-full py-3 px-6 bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold rounded-xl transition-colors disabled:opacity-50 min-h-[44px]"
+        className="cursor-pointer w-full py-3 px-6 bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold rounded-xl transition-colors duration-200 disabled:opacity-50 min-h-[44px]"
       >
         {status === "sending"
           ? "Надсилаю..."
