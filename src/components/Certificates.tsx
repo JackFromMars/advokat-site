@@ -186,12 +186,12 @@ export default function Certificates() {
                 }
               }}
             >
-              {/* Image */}
-              <div className="relative aspect-[16/10] md:aspect-[16/9] overflow-hidden bg-[var(--color-bg-base)]">
+              {/* Image — fixed height container */}
+              <div className="relative h-[240px] sm:h-[320px] md:h-[420px] lg:h-[480px] overflow-hidden bg-[var(--color-bg-base)]">
                 {certificates.map((c, i) => (
                   <div
                     key={c.image}
-                    className="absolute inset-0"
+                    className="absolute inset-0 flex items-center justify-center p-4 md:p-6"
                     style={{
                       opacity: current === i ? 1 : 0,
                       transition: "opacity 0.5s var(--ease-out)",
@@ -200,12 +200,13 @@ export default function Certificates() {
                     <Image
                       src={c.image}
                       alt={c.title}
-                      fill
-                      className="object-contain group-hover:scale-[1.02]"
+                      width={900}
+                      height={640}
+                      className="max-w-full max-h-full w-auto h-auto object-contain group-hover:scale-[1.02]"
                       style={{
                         transition: "transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)",
                       }}
-                      sizes="(max-width: 768px) 100vw, 700px"
+                      sizes="(max-width: 768px) 90vw, 700px"
                       priority={i === 0}
                     />
                   </div>
