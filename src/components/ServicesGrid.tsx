@@ -6,7 +6,12 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { primaryServices, secondaryServices } from "@/data/services";
 import ServiceIcon from "@/components/icons/ServiceIcons";
-import HighlightCard from "@/components/HighlightCard";
+
+const imageMap: Record<string, string> = {
+  "simejni-spravy": "/images/service-family.png",
+  "zhytlovi-superechky": "/images/service-housing.png",
+  "mobilizatsiya": "/images/service-military.png",
+};
 
 export default function ServicesGrid() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -37,10 +42,10 @@ export default function ServicesGrid() {
     <section
       id="services"
       ref={sectionRef}
-      className="section-glow py-20 md:py-28 lg:py-32 relative overflow-hidden"
+      className="section-glow py-20 md:py-28 relative overflow-hidden"
     >
       {/* Background image */}
-      <div className="absolute inset-0 opacity-[0.04]">
+      <div className="absolute inset-0 opacity-[0.03]">
         <Image
           src="/images/services-bg.png"
           alt=""
@@ -61,68 +66,54 @@ export default function ServicesGrid() {
           </p>
         </div>
 
-        {/* Primary services */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-16 md:mb-20">
+        {/* Primary services — photo cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 mb-16 md:mb-20">
           {primaryServices.map((service, index) => (
-            <HighlightCard key={service.slug}>
-              <div className={`reveal stagger-${index + 1}`}>
-                <Link
-                  href={`/${service.slug}`}
-                  className="group cursor-pointer block"
-                >
-                  <div
-                    className="card-premium transition-all duration-500"
-                    style={{
-                      transitionTimingFunction:
-                        "cubic-bezier(0.23, 1, 0.32, 1)",
-                    }}
-                  >
-                    <div className="card-premium-inner p-6 md:p-8">
-                      <div className="icon-container-lg mb-5">
-                        <ServiceIcon slug={service.slug} size={24} />
-                      </div>
+            <div key={service.slug} className={`reveal stagger-${index + 1}`}>
+              <Link
+                href={`/${service.slug}`}
+                className="card-image group cursor-pointer block"
+              >
+                {/* Photo area */}
+                <div className="relative h-48 md:h-56 overflow-hidden">
+                  <Image
+                    src={imageMap[service.slug]}
+                    alt={service.title}
+                    fill
+                    className="object-cover transition-transform duration-700"
+                    style={{ transitionTimingFunction: "var(--ease-out)" }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-bg-card)] via-transparent to-transparent" />
+                </div>
 
-                      <h3 className="font-heading text-xl md:text-2xl font-bold text-[var(--color-foreground)] mb-3 group-hover:text-[var(--color-accent)] transition-colors duration-300">
-                        {service.title}
-                      </h3>
+                {/* Content below photo */}
+                <div className="p-5 md:p-7">
+                  <h3 className="font-heading text-xl md:text-2xl font-bold text-[var(--color-foreground)] mb-3 group-hover:text-[var(--color-accent)] transition-colors duration-300">
+                    {service.title}
+                  </h3>
 
-                      <p className="text-[var(--color-foreground-secondary)] text-sm leading-relaxed mb-4">
-                        {service.description}
-                      </p>
+                  <p className="text-[var(--color-foreground-secondary)] text-sm leading-relaxed mb-4">
+                    {service.description}
+                  </p>
 
-                      <ul className="space-y-1.5 mb-5">
-                        {service.subServices.slice(0, 3).map((sub) => (
-                          <li
-                            key={sub.title}
-                            className="text-xs text-[var(--color-muted)] flex items-start gap-2"
-                          >
-                            <span
-                              className="mt-1.5 flex-shrink-0 w-1.5 h-1.5 rounded-full"
-                              style={{
-                                backgroundColor: "var(--color-accent)",
-                              }}
-                            />
-                            {sub.title}
-                          </li>
-                        ))}
-                      </ul>
+                  <ul className="space-y-1.5 mb-5">
+                    {service.subServices.slice(0, 3).map((sub) => (
+                      <li
+                        key={sub.title}
+                        className="text-xs text-[var(--color-muted)] flex items-center gap-2"
+                      >
+                        <span className="w-1 h-1 rounded-full bg-[var(--color-accent)]" />
+                        {sub.title}
+                      </li>
+                    ))}
+                  </ul>
 
-                      <div className="text-[var(--color-accent)] text-sm font-medium flex items-center gap-1.5 min-h-[44px]">
-                        <span>Детальніше</span>
-                        <ArrowRight
-                          size={14}
-                          className="group-hover:translate-x-1.5 transition-transform duration-300"
-                          style={{
-                            transitionTimingFunction:
-                              "cubic-bezier(0.23, 1, 0.32, 1)",
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </div>
-            </HighlightCard>
+                  <span className="flex items-center gap-2 text-[var(--color-accent)] text-sm font-medium group-hover:gap-3 transition-all duration-300">
+                    Детальніше <ArrowRight size={14} />
+                  </span>
+                </div>
+              </Link>
+            </div>
           ))}
         </div>
 
@@ -134,31 +125,39 @@ export default function ServicesGrid() {
         </div>
 
         {/* Secondary services */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
           {secondaryServices.map((service, index) => (
-            <HighlightCard key={service.slug}>
-              <div className={`reveal stagger-${index + 1}`}>
-                <Link
-                  href={`/${service.slug}`}
-                  className="group cursor-pointer block"
-                >
-                  <div
-                    className="glass glass-hover p-3 md:p-4 text-center min-h-[44px] transition-all duration-500"
-                    style={{
-                      transitionTimingFunction:
-                        "cubic-bezier(0.23, 1, 0.32, 1)",
-                    }}
-                  >
-                    <div className="icon-container mb-2 mx-auto">
-                      <ServiceIcon slug={service.slug} size={20} />
-                    </div>
+            <div key={service.slug} className={`reveal stagger-${(index % 5) + 1}`}>
+              <Link
+                href={`/${service.slug}`}
+                className="card p-4 md:p-5 group cursor-pointer block"
+              >
+                {/* Desktop: icon centered, no subtitle */}
+                <div className="hidden md:flex flex-col items-center text-center gap-2">
+                  <div className="icon-container">
+                    <ServiceIcon slug={service.slug} size={20} />
+                  </div>
+                  <h4 className="text-sm font-semibold text-[var(--color-foreground)] group-hover:text-[var(--color-accent)] transition-colors duration-300">
+                    {service.shortTitle}
+                  </h4>
+                </div>
+
+                {/* Mobile: horizontal with subtitle */}
+                <div className="flex md:hidden items-center gap-4">
+                  <div className="icon-container shrink-0">
+                    <ServiceIcon slug={service.slug} size={20} />
+                  </div>
+                  <div>
                     <h4 className="text-sm font-semibold text-[var(--color-foreground)] group-hover:text-[var(--color-accent)] transition-colors duration-300">
                       {service.shortTitle}
                     </h4>
+                    <p className="text-xs text-[var(--color-muted)] mt-0.5">
+                      {service.description.slice(0, 70)}...
+                    </p>
                   </div>
-                </Link>
-              </div>
-            </HighlightCard>
+                </div>
+              </Link>
+            </div>
           ))}
         </div>
       </div>

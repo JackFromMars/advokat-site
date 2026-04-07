@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MessageCircleMore, X } from "lucide-react";
 import {
   TelegramIcon,
@@ -12,6 +12,12 @@ import { contacts } from "@/data/contacts";
 
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
+  const [bounced, setBounced] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setBounced(true), 3000);
+    return () => clearTimeout(t);
+  }, []);
 
   const channels = [
     {
@@ -50,28 +56,27 @@ export default function ChatWidget() {
           transform: isOpen ? "scale(1)" : "scale(0.95)",
           opacity: isOpen ? 1 : 0,
           pointerEvents: isOpen ? "auto" : "none",
-          transition: "transform 200ms var(--ease-out), opacity 200ms var(--ease-out)",
+          transition:
+            "transform 200ms var(--ease-out), opacity 200ms var(--ease-out)",
         }}
       >
-        <div className="card-premium">
-          <div className="card-premium-inner p-2 min-w-[220px]">
-            {channels.map((channel) => (
-              <a
-                key={channel.label}
-                href={channel.href}
-                target={channel.href.startsWith("http") ? "_blank" : undefined}
-                rel={
-                  channel.href.startsWith("http")
-                    ? "noopener noreferrer"
-                    : undefined
-                }
-                className={`flex items-center gap-3 px-4 min-h-[48px] rounded-xl text-[var(--color-foreground)] text-sm font-medium transition-colors duration-200 cursor-pointer ${channel.hoverBg}`}
-              >
-                {channel.icon}
-                {channel.label}
-              </a>
-            ))}
-          </div>
+        <div className="card p-2 min-w-[220px]">
+          {channels.map((channel) => (
+            <a
+              key={channel.label}
+              href={channel.href}
+              target={channel.href.startsWith("http") ? "_blank" : undefined}
+              rel={
+                channel.href.startsWith("http")
+                  ? "noopener noreferrer"
+                  : undefined
+              }
+              className={`flex items-center gap-3 px-4 min-h-[48px] rounded-xl bg-transparent text-[var(--color-foreground)] text-sm font-medium transition-colors duration-200 cursor-pointer hover:bg-[var(--color-bg-card-hover)]`}
+            >
+              {channel.icon}
+              {channel.label}
+            </a>
+          ))}
         </div>
       </div>
 
@@ -79,10 +84,13 @@ export default function ChatWidget() {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="relative w-14 h-14 rounded-full bg-[var(--color-accent)] text-[var(--color-bg-deep)] flex items-center justify-center cursor-pointer active:scale-[0.93]"
+        className={`relative w-14 h-14 rounded-full bg-[var(--color-accent)] text-[var(--color-bg-deep)] flex items-center justify-center cursor-pointer active:scale-[0.93] ${!isOpen ? "pulse-ring" : ""}`}
         style={{
           boxShadow: "0 4px 24px rgba(201, 168, 76, 0.3)",
-          transition: "transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out)",
+          transition:
+            "transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out)",
+          animation:
+            bounced && !isOpen ? "float 2s ease-in-out infinite" : "none",
         }}
         aria-label="Зв'язатися з адвокатом"
       >
@@ -90,9 +98,12 @@ export default function ChatWidget() {
         <span
           className="absolute inset-0 flex items-center justify-center"
           style={{
-            transform: isOpen ? "rotate(90deg) scale(0)" : "rotate(0deg) scale(1)",
+            transform: isOpen
+              ? "rotate(90deg) scale(0)"
+              : "rotate(0deg) scale(1)",
             opacity: isOpen ? 0 : 1,
-            transition: "transform 250ms var(--ease-out), opacity 250ms var(--ease-out)",
+            transition:
+              "transform 250ms var(--ease-out), opacity 250ms var(--ease-out)",
           }}
         >
           <MessageCircleMore size={24} />
@@ -102,9 +113,12 @@ export default function ChatWidget() {
         <span
           className="absolute inset-0 flex items-center justify-center"
           style={{
-            transform: isOpen ? "rotate(0deg) scale(1)" : "rotate(-90deg) scale(0)",
+            transform: isOpen
+              ? "rotate(0deg) scale(1)"
+              : "rotate(-90deg) scale(0)",
             opacity: isOpen ? 1 : 0,
-            transition: "transform 250ms var(--ease-out), opacity 250ms var(--ease-out)",
+            transition:
+              "transform 250ms var(--ease-out), opacity 250ms var(--ease-out)",
           }}
         >
           <X size={24} />
