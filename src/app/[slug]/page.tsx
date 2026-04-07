@@ -23,9 +23,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: service.title,
     description: service.metaDescription,
+    keywords: service.keywords?.join(", "),
     openGraph: {
       title: service.title,
       description: service.metaDescription,
+      images: service.heroImage ? [{ url: service.heroImage }] : undefined,
     },
   };
 }

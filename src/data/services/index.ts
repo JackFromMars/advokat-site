@@ -8,14 +8,30 @@ export interface ServiceFAQ {
   answer: string;
 }
 
+export interface ServiceStat {
+  value: string;
+  label: string;
+}
+
+export interface WorkStage {
+  title: string;
+  description: string;
+}
+
 export interface Service {
   slug: string;
   title: string;
   shortTitle: string;
   description: string;
+  longDescription: string;
   metaDescription: string;
   icon: string;
+  heroImage: string;
   isPrimary: boolean;
+  keywords: string[];
+  advantages: string[];
+  stats: ServiceStat[];
+  workStages: WorkStage[];
   subServices: SubService[];
   faq: ServiceFAQ[];
 }
