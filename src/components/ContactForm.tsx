@@ -8,32 +8,32 @@ interface ContactFormProps {
 }
 
 /* ── Phone mask helpers ──
-   State stores only subscriber digits (up to 9), e.g. "951234567".
-   The "0" prefix and "+38" are added automatically during formatting.
-   Format: +38 (0XX) XXX-XX-XX
+   State stores user-typed digits (up to 10), e.g. "0508631248".
+   "+38" prefix is fixed and added automatically.
+   Format: +38 (XXX) XXX-XX-XX
+   E.164:  +38 + 10 digits = +380508631248
 */
 
 function formatSubscriber(d: string): string {
   if (d.length === 0) return "";
-  let f = "+38 (0" + d.slice(0, 2);
-  if (d.length >= 2) f += ") ";
-  if (d.length > 2) f += d.slice(2, 5);
-  if (d.length > 5) f += "-" + d.slice(5, 7);
-  if (d.length > 7) f += "-" + d.slice(7, 9);
+  let f = "+38 (" + d.slice(0, 3);
+  if (d.length >= 3) f += ") ";
+  if (d.length > 3) f += d.slice(3, 6);
+  if (d.length > 6) f += "-" + d.slice(6, 8);
+  if (d.length > 8) f += "-" + d.slice(8, 10);
   return f;
 }
 
 /** Build a map: digit index → position AFTER that digit in the formatted string */
 function buildDigitPositions(formatted: string): number[] {
   const positions: number[] = [];
-  // Skip fixed chars: +, 3, 8, space, (, 0 — first real digit is at index 6
-  let skippedFixed = 0; // skip "3", "8", "0"
+  let skippedFixed = 0; // skip "3", "8" from "+38"
   for (let i = 0; i < formatted.length; i++) {
     if (/\d/.test(formatted[i])) {
-      if (skippedFixed < 3) {
+      if (skippedFixed < 2) {
         skippedFixed++;
       } else {
-        positions.push(i + 1); // position AFTER this digit
+        positions.push(i + 1);
       }
     }
   }
@@ -46,7 +46,7 @@ function cursorToDigitIdx(formatted: string, cursor: number): number {
   let skippedFixed = 0;
   for (let i = 0; i < cursor && i < formatted.length; i++) {
     if (/\d/.test(formatted[i])) {
-      if (skippedFixed < 3) {
+      if (skippedFixed < 2) {
         skippedFixed++;
       } else {
         idx++;
@@ -57,13 +57,13 @@ function cursorToDigitIdx(formatted: string, cursor: number): number {
 }
 
 function toE164(digits: string): string {
-  if (digits.length === 9) return "+380" + digits;
+  if (digits.length === 10 && digits.startsWith("0")) return "+38" + digits;
   return "";
 }
 
 export default function ContactForm({ variant = "section" }: ContactFormProps) {
   const [name, setName] = useState("");
-  const [digits, setDigits] = useState(""); // subscriber digits only, max 9
+  const [digits, setDigits] = useState(""); // user-typed digits, max 10 (e.g. 0508631248)
   const [honeypot, setHoneypot] = useState("");
   const [loadTime] = useState(() => Date.now());
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -87,8 +87,8 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
     const formatted = formatSubscriber(newDigits);
     const positions = buildDigitPositions(formatted);
     if (digitIdx <= 0) {
-      // Before any subscriber digit — put cursor right after "(0"
-      pendingCursor.current = formatted.indexOf("(0") !== -1 ? formatted.indexOf("(0") + 2 : 0;
+      // Before any user digit — put cursor right after "("
+      pendingCursor.current = formatted.indexOf("(") !== -1 ? formatted.indexOf("(") + 1 : 0;
     } else if (digitIdx > positions.length) {
       pendingCursor.current = formatted.length;
     } else {
@@ -104,7 +104,7 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
 
     if (/^\d$/.test(e.key)) {
       e.preventDefault();
-      if (digits.length >= 9) return;
+      if (digits.length >= 10) return;
 
       const digitIdx = cursorToDigitIdx(formatted, cursor);
       const newDigits = digits.slice(0, digitIdx) + e.key + digits.slice(digitIdx);
@@ -170,10 +170,10 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
     e.preventDefault();
     const pasted = e.clipboardData.getData("text");
     const pastedDigits = pasted.replace(/\D/g, "");
+    // Normalize: +380... → 0..., 380... → 0..., 80... → 0...
     let d = pastedDigits;
-    if (d.startsWith("380")) d = d.slice(3);
-    else if (d.startsWith("80")) d = d.slice(2);
-    else if (d.startsWith("0")) d = d.slice(1);
+    if (d.startsWith("380")) d = "0" + d.slice(3);
+    else if (d.startsWith("80")) d = "0" + d.slice(2);
 
     const input = e.currentTarget;
     const cursor = input.selectionStart ?? 0;
@@ -183,7 +183,7 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
 
     const before = digits.slice(0, startIdx);
     const after = digits.slice(endIdx);
-    const newDigits = (before + d + after).slice(0, 9);
+    const newDigits = (before + d + after).slice(0, 10);
 
     setCursorAfterDigit(newDigits, Math.min(startIdx + d.length, newDigits.length));
     setDigits(newDigits);
@@ -365,6 +365,7 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
           ref={phoneRef}
           type="tel"
           placeholder="+38 (0XX) XXX-XX-XX"
+          inputMode="tel"
           value={phoneDisplay}
           onChange={handlePhoneChange}
           onKeyDown={handlePhoneKeyDown}
