@@ -35,14 +35,16 @@ export async function getPlaceReviews(): Promise<PlaceDetails | null> {
     return {
       rating: result.rating ?? 0,
       totalReviews: result.user_ratings_total ?? 0,
-      reviews: (result.reviews ?? []).map(
-        (r: { author_name: string; rating: number; text: string; relative_time_description: string }) => ({
-          authorName: r.author_name,
-          rating: r.rating,
-          text: r.text,
-          relativeTimeDescription: r.relative_time_description,
-        })
-      ),
+      reviews: (result.reviews ?? [])
+        .map(
+          (r: { author_name: string; rating: number; text: string; relative_time_description: string }) => ({
+            authorName: r.author_name,
+            rating: r.rating,
+            text: r.text,
+            relativeTimeDescription: r.relative_time_description,
+          })
+        )
+        .filter((r: GoogleReview) => r.rating >= 3),
     };
   } catch {
     return null;
