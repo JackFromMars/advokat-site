@@ -101,10 +101,8 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
     if (variant === "hero") {
       return (
         <div ref={sectionRef} className="max-w-sm">
-          <div className="card-premium">
-            <div className="card-premium-inner p-4 md:p-6">
-              {successContent}
-            </div>
+          <div className="card p-4 md:p-6">
+            {successContent}
           </div>
         </div>
       );
@@ -112,10 +110,8 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
 
     return (
       <div ref={sectionRef} className="max-w-lg mx-auto">
-        <div className="card-premium">
-          <div className="card-premium-inner p-4 md:p-6">
-            {successContent}
-          </div>
+        <div className="card p-4 md:p-6">
+          {successContent}
         </div>
       </div>
     );
@@ -216,10 +212,8 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
   if (variant === "hero") {
     return (
       <div ref={sectionRef} className="max-w-sm">
-        <div className="card-premium">
-          <div className="card-premium-inner p-4 md:p-6">
-            {formContent}
-          </div>
+        <div className="card p-4 md:p-6">
+          {formContent}
         </div>
       </div>
     );
@@ -227,10 +221,8 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
 
   return (
     <div ref={sectionRef} className="max-w-lg mx-auto">
-      <div className="reveal stagger-1 card-premium">
-        <div className="card-premium-inner p-4 md:p-6">
-          {formContent}
-        </div>
+      <div className="reveal stagger-1 card p-4 md:p-6">
+        {formContent}
       </div>
     </div>
   );

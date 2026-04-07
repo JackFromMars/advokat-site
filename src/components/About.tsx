@@ -61,17 +61,15 @@ export default function About() {
           {/* Photo column */}
           <div className="lg:col-span-2 order-2 lg:order-1 flex justify-center lg:justify-start">
             <div className="reveal stagger-1 max-w-xs w-full">
-              <div className="card-premium shadow-[0_0_60px_rgba(201,168,76,0.1)]">
-                <div className="card-premium-inner">
-                  <div className="relative aspect-[3/4] rounded-lg overflow-hidden">
-                    <Image
-                      src="/images/photo.jpg"
-                      alt={contacts.name}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 1024px) 320px, 400px"
-                    />
-                  </div>
+              <div className="card shadow-[0_0_60px_rgba(201,168,76,0.1)]">
+                <div className="relative aspect-[3/4] rounded-lg overflow-hidden">
+                  <Image
+                    src="/images/photo.jpg"
+                    alt={contacts.name}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 320px, 400px"
+                  />
                 </div>
               </div>
             </div>

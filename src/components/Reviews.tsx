@@ -123,9 +123,8 @@ export default function Reviews({ data }: ReviewsProps) {
           {data.reviews.slice(0, 6).map((review, index) => (
             <div
               key={index}
-              className={`reveal stagger-${index + 1} card-premium`}
+              className={`reveal stagger-${index + 1} card p-6`}
             >
-              <div className="card-premium-inner p-6">
                 {/* Author */}
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-11 h-11 rounded-full bg-[var(--color-accent)]/20 flex items-center justify-center text-[var(--color-accent)] font-bold text-sm shrink-0">
@@ -150,7 +149,6 @@ export default function Reviews({ data }: ReviewsProps) {
                 <p className="text-[var(--color-foreground-secondary)] text-sm leading-relaxed line-clamp-4">
                   {review.text}
                 </p>
-              </div>
             </div>
           ))}
         </div>

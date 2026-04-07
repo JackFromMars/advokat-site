@@ -36,15 +36,13 @@ export default function ServicePageContent({
           {/* Sub-services grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             {service.subServices.map((sub) => (
-              <div key={sub.title} className="card-premium">
-                <div className="card-premium-inner p-6 md:p-8">
+              <div key={sub.title} className="card p-6 md:p-8">
                   <h2 className="font-heading text-lg md:text-xl font-semibold text-[var(--color-foreground)] mb-3">
                     {sub.title}
                   </h2>
                   <p className="text-[var(--color-foreground-secondary)] text-sm leading-relaxed">
                     {sub.description}
                   </p>
-                </div>
               </div>
             ))}
           </div>

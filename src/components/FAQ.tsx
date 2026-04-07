@@ -68,9 +68,8 @@ export default function FAQ({
             return (
               <div
                 key={index}
-                className={`reveal ${staggerClass} card-premium`}
+                className={`reveal ${staggerClass} card`}
               >
-                <div className="card-premium-inner">
                   <button
                     type="button"
                     className="w-full px-5 sm:px-6 py-4 text-left flex items-center justify-between gap-4 min-h-[56px] cursor-pointer"
@@ -122,7 +121,6 @@ export default function FAQ({
                       </div>
                     </div>
                   </div>
-                </div>
               </div>
             );
           })}
