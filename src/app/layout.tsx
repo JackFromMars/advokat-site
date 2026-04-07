@@ -50,8 +50,9 @@ export default function RootLayout({
         />
       </head>
       <body className={`${ebGaramond.variable} ${lato.variable} font-sans`}>
+        <div className="noise-overlay" aria-hidden="true" />
         <Header />
-        <main className="pt-16 md:pt-20">{children}</main>
+        <main>{children}</main>
         <Footer />
         <ChatWidget />
       </body>
