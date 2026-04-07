@@ -6,6 +6,7 @@ export interface GoogleReview {
   rating: number;
   text: string;
   relativeTimeDescription: string;
+  profilePhoto?: string;
 }
 
 export interface PlaceDetails {
@@ -58,11 +59,12 @@ export async function getPlaceReviews(): Promise<PlaceDetails | null> {
       rating: result.rating ?? 0,
       totalReviews: result.user_ratings_total ?? 0,
       reviews: (result.reviews ?? [])
-        .map((r: { author_name: string; rating: number; text: string; relative_time_description: string }) => ({
+        .map((r: { author_name: string; rating: number; text: string; relative_time_description: string; profile_photo_url?: string }) => ({
           authorName: r.author_name,
           rating: r.rating,
           text: r.text,
           relativeTimeDescription: r.relative_time_description,
+          profilePhoto: r.profile_photo_url,
         }))
         .filter((r: GoogleReview) => r.rating >= 3),
     };

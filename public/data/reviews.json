@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-04-07T14:27:51.586Z",
+  "fetchedAt": "2026-04-07T14:43:51.550Z",
   "placeId": "ChIJbYTlkMwPNEcRWuXS1vymzcE",
   "rating": 4.5,
   "totalReviews": 30,
@@ -8,25 +8,29 @@
       "authorName": "Mariia Levchenko",
       "rating": 5,
       "text": "Адвокат Левченко Наталія Вікторівна– майстер своєї справи! Завдяки її знанням, ми швидко вирішили моє питання. Відмінна робота, висока відповідальність і повна віддача. Дуже вдячна! Рекомендую!",
-      "relativeTimeDescription": "5 місяців тому"
+      "relativeTimeDescription": "5 місяців тому",
+      "profilePhoto": "https://lh3.googleusercontent.com/a-/ALV-UjXWMuLyP10soI0aD0p4YH5DWlM_kenv1y9tAHfdPHkHP1GZmlcC=s128-c0x00000000-cc-rp-mo"
     },
     {
       "authorName": "Василь Тимчасюк",
       "rating": 5,
       "text": "Професійний адвокат.дякую за допомогу, дуже швидко вирішена справа. Рекомендую!",
-      "relativeTimeDescription": "6 місяців тому"
+      "relativeTimeDescription": "6 місяців тому",
+      "profilePhoto": "https://lh3.googleusercontent.com/a-/ALV-UjWh5gMEKGgjmfqeP0fEXFM6F5Ds0ZF8mKolcvgDIrFolff9TwU=s128-c0x00000000-cc-rp-mo"
     },
     {
       "authorName": "Марьянка Кочала",
       "rating": 5,
       "text": "Хороша і чуйна людина яка допоможе і завжди!Як адвокат завжи майстер свого діла",
-      "relativeTimeDescription": "5 місяців тому"
+      "relativeTimeDescription": "5 місяців тому",
+      "profilePhoto": "https://lh3.googleusercontent.com/a/ACg8ocLNpY8JCW-MQ0HH2nZFc_dNO9t0-H0LFhIZdROGbKKTXKa4XA=s128-c0x00000000-cc-rp-mo"
     },
     {
       "authorName": "Мар'яна Сивочола",
       "rating": 5,
       "text": "Дуже сподобалося спілкування. Чудовий фахівець. Питання було зрозуміло роз'яснено. Дякую. Рекомендую.",
-      "relativeTimeDescription": "6 місяців тому"
+      "relativeTimeDescription": "6 місяців тому",
+      "profilePhoto": "https://lh3.googleusercontent.com/a/ACg8ocJ0ZO0kxoGPL8j2qkNUozVjNl8_E9eFYCjVy2I5Epjq2yaDVw=s128-c0x00000000-cc-rp-mo"
     }
   ]
 }

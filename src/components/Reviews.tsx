@@ -196,9 +196,21 @@ export default function Reviews({ data }: ReviewsProps) {
               >
                 {/* Avatar */}
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-[var(--color-accent)]/15 flex items-center justify-center text-[var(--color-accent)] font-heading font-bold text-sm shrink-0">
-                    {review.authorName.charAt(0)}
-                  </div>
+                  {review.profilePhoto ? (
+                    <img
+                      src={review.profilePhoto}
+                      alt={review.authorName}
+                      width={40}
+                      height={40}
+                      className="w-10 h-10 rounded-full object-cover shrink-0"
+                      loading="lazy"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-[var(--color-accent)]/15 flex items-center justify-center text-[var(--color-accent)] font-heading font-bold text-sm shrink-0">
+                      {review.authorName.charAt(0)}
+                    </div>
+                  )}
                   <div className="min-w-0">
                     <p className="text-[var(--color-foreground)] font-medium text-sm truncate">
                       {review.authorName}
