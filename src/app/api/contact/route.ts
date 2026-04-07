@@ -9,20 +9,29 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { name, phone } = body;
+    const { name, phone, _hp, _ts } = body;
 
-    if (!name || !phone) {
-      return NextResponse.json(
-        { error: "Ім'я та телефон обов'язкові" },
-        { status: 400 }
-      );
+    // Honeypot check — silent success for bots
+    if (_hp) {
+      return NextResponse.json({ success: true });
     }
 
-    if (name.length > 100 || phone.length > 20) {
-      return NextResponse.json(
-        { error: "Невірні дані" },
-        { status: 400 }
-      );
+    // Timestamp check — too fast = bot
+    if (_ts && Date.now() - _ts < 2000) {
+      return NextResponse.json({ success: true });
+    }
+
+    if (!name || !phone) {
+      return NextResponse.json({ error: "Ім'я та телефон обов'язкові" }, { status: 400 });
+    }
+
+    if (typeof name !== "string" || name.length < 2 || name.length > 100) {
+      return NextResponse.json({ error: "Невірне ім'я" }, { status: 400 });
+    }
+
+    // Validate E.164 Ukrainian phone
+    if (!/^\+380\d{9}$/.test(phone)) {
+      return NextResponse.json({ error: "Невірний номер телефону" }, { status: 400 });
     }
 
     await sendToTelegram({ name, phone });
@@ -30,9 +39,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Contact form error:", error);
-    return NextResponse.json(
-      { error: "Помилка відправки" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Помилка відправки" }, { status: 500 });
   }
 }

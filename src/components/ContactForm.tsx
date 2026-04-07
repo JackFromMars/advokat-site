@@ -7,9 +7,35 @@ interface ContactFormProps {
   variant?: "hero" | "section";
 }
 
+function formatPhone(value: string): string {
+  const digits = value.replace(/\D/g, "");
+
+  let d = digits;
+  if (d.startsWith("380")) d = d.slice(3);
+  else if (d.startsWith("80")) d = d.slice(2);
+  else if (d.startsWith("0")) d = d.slice(1);
+
+  let formatted = "+38";
+  if (d.length > 0) formatted += " (0" + d.slice(0, 2);
+  if (d.length >= 2) formatted += ") ";
+  if (d.length > 2) formatted += d.slice(2, 5);
+  if (d.length > 5) formatted += "-" + d.slice(5, 7);
+  if (d.length > 7) formatted += "-" + d.slice(7, 9);
+
+  return formatted;
+}
+
+function toE164(formatted: string): string {
+  const digits = formatted.replace(/\D/g, "");
+  if (digits.startsWith("380") && digits.length === 12) return "+" + digits;
+  return "";
+}
+
 export default function ContactForm({ variant = "section" }: ContactFormProps) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [honeypot, setHoneypot] = useState("");
+  const [loadTime] = useState(() => Date.now());
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [fieldErrors, setFieldErrors] = useState<{ name?: string; phone?: string }>({});
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -39,14 +65,24 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
 
   function validate(): boolean {
     const errors: { name?: string; phone?: string } = {};
-    if (!name.trim()) errors.name = "Введіть ваше ім'я";
-    if (!phone.trim()) errors.phone = "Введіть номер телефону";
+    if (!name.trim() || name.trim().length < 2) errors.name = "Введіть ваше ім'я";
+    const e164 = toE164(phone);
+    if (!e164) errors.phone = "Введіть коректний номер телефону";
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+    // Silent reject for bots that submit too fast
+    if (Date.now() - loadTime < 2000) {
+      setStatus("sent");
+      setName("");
+      setPhone("");
+      return;
+    }
+
     if (!validate()) return;
 
     setStatus("sending");
@@ -56,7 +92,12 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: name.trim(), phone: phone.trim() }),
+        body: JSON.stringify({
+          name: name.trim(),
+          phone: toE164(phone),
+          _hp: honeypot,
+          _ts: loadTime,
+        }),
       });
 
       if (res.ok) {
@@ -134,6 +175,18 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
         </h3>
       )}
 
+      {/* Honeypot - hidden from humans */}
+      <div style={{ position: 'absolute', left: '-9999px', opacity: 0, height: 0, overflow: 'hidden' }} aria-hidden="true">
+        <input
+          type="text"
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+          value={honeypot}
+          onChange={(e) => setHoneypot(e.target.value)}
+        />
+      </div>
+
       {/* Name field */}
       <div>
         <input
@@ -157,12 +210,14 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
       <div>
         <input
           type="tel"
-          placeholder="Ваш телефон"
+          placeholder="+38 (0XX) XXX-XX-XX"
           value={phone}
           onChange={(e) => {
-            setPhone(e.target.value);
+            const formatted = formatPhone(e.target.value);
+            setPhone(formatted);
             if (fieldErrors.phone) setFieldErrors((p) => ({ ...p, phone: undefined }));
           }}
+          maxLength={19}
           required
           className={inputClasses}
           style={inputTransition}
