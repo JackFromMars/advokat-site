@@ -55,15 +55,15 @@ export default function Reviews({ data }: ReviewsProps) {
     return () => clearInterval(timer);
   }, [isPaused, filteredReviews.length]);
 
-  // Scroll to current card
+  // Scroll to current card (within container only, no page jump)
   useEffect(() => {
-    if (!sliderRef.current) return;
-    const card = sliderRef.current.children[currentIndex] as HTMLElement;
+    const container = sliderRef.current;
+    if (!container) return;
+    const card = container.children[currentIndex] as HTMLElement;
     if (card) {
-      card.scrollIntoView({
+      container.scrollTo({
+        left: card.offsetLeft - container.offsetLeft,
         behavior: "smooth",
-        block: "nearest",
-        inline: "start",
       });
     }
   }, [currentIndex]);
