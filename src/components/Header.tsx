@@ -13,14 +13,13 @@ export default function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -38,134 +37,102 @@ export default function Header() {
     <>
       {/* ─── Desktop floating pill nav ─── */}
       <header
-        className="fixed top-0 left-0 right-0 z-50 hidden md:block pointer-events-none"
-      >
-        <div className="max-w-4xl mx-auto mt-4 pointer-events-auto">
-          <nav
-            className="rounded-full border border-[var(--color-border)] px-6 py-3 flex items-center justify-between"
-            style={{
-              background: scrolled
-                ? "rgba(10, 13, 21, 0.85)"
-                : "rgba(10, 13, 21, 0.55)",
-              backdropFilter: "blur(20px) saturate(1.4)",
-              WebkitBackdropFilter: "blur(20px) saturate(1.4)",
-              transition: "background 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out)",
-              boxShadow: scrolled
-                ? "0 8px 32px rgba(0,0,0,0.4), inset 0 0.5px 0 rgba(255,255,255,0.06)"
-                : "0 4px 24px rgba(0,0,0,0.2), inset 0 0.5px 0 rgba(255,255,255,0.06)",
-            }}
-          >
-            {/* Logo */}
-            <Link href="/" className="cursor-pointer shrink-0">
-              <Image
-                src="/images/logo.svg"
-                alt="Адвокат Левченко"
-                width={140}
-                height={44}
-                className="h-9 w-auto"
-                priority
-              />
-            </Link>
-
-            {/* Center nav links */}
-            <div className="flex items-center gap-1">
-              {navigation.main.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="px-3 py-2 text-[13px] uppercase tracking-[0.08em] font-medium text-[var(--color-foreground-secondary)] rounded-full cursor-pointer"
-                  style={{
-                    transition: "color 0.3s var(--ease-out), background-color 0.3s var(--ease-out)",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.color = "var(--color-accent)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.color = "var(--color-foreground-secondary)";
-                  }}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </div>
-
-            {/* Phone */}
-            <a
-              href={`tel:${contacts.phoneRaw}`}
-              className="flex items-center gap-2 text-[13px] font-semibold tracking-wide text-[var(--color-accent)] cursor-pointer shrink-0"
-              style={{
-                transition: "opacity 0.3s var(--ease-out), transform 0.15s var(--ease-out)",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.opacity = "0.8";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.opacity = "1";
-              }}
-              onMouseDown={(e) => {
-                e.currentTarget.style.transform = "scale(0.98)";
-              }}
-              onMouseUp={(e) => {
-                e.currentTarget.style.transform = "scale(1)";
-              }}
-            >
-              <Phone size={14} strokeWidth={2.5} />
-              {contacts.phone}
-            </a>
-          </nav>
-        </div>
-      </header>
-
-      {/* ─── Mobile header ─── */}
-      <header
-        className="fixed top-0 left-0 right-0 z-50 md:hidden"
+        className="fixed top-4 left-1/2 -translate-x-1/2 z-40 hidden md:block max-w-4xl w-[90%]"
         style={{
-          background: scrolled || isOpen
-            ? "rgba(10, 13, 21, 0.9)"
-            : "rgba(10, 13, 21, 0.6)",
-          backdropFilter: "blur(16px) saturate(1.3)",
-          WebkitBackdropFilter: "blur(16px) saturate(1.3)",
-          transition: "background 0.4s var(--ease-out)",
-          borderBottom: "1px solid var(--color-border)",
+          transition: "box-shadow 0.5s var(--ease-out), background-color 0.5s var(--ease-out)",
         }}
       >
-        <div className="flex items-center justify-between px-5 h-16">
+        <nav
+          className="rounded-full border border-[var(--color-border)] px-6 py-3 flex items-center justify-between backdrop-blur-xl"
+          style={{
+            backgroundColor: scrolled
+              ? "rgba(28, 32, 48, 0.92)"
+              : "rgba(28, 32, 48, 0.80)",
+            boxShadow: scrolled
+              ? "0 8px 32px rgba(0,0,0,0.5), inset 0 0.5px 0 rgba(255,255,255,0.06)"
+              : "0 4px 24px rgba(0,0,0,0.2), inset 0 0.5px 0 rgba(255,255,255,0.06)",
+            transition: "background-color 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out)",
+          }}
+        >
+          {/* Logo */}
+          <Link href="/" className="cursor-pointer shrink-0">
+            <Image
+              src="/images/logo.svg"
+              alt="Адвокат Левченко"
+              width={140}
+              height={40}
+              className="h-8 md:h-9 w-auto"
+              preload
+            />
+          </Link>
+
+          {/* Center nav links */}
+          <div className="flex items-center gap-1">
+            {navigation.main.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="px-3 py-2 text-[13px] uppercase tracking-[0.08em] font-medium text-[var(--color-foreground-secondary)] rounded-full cursor-pointer hover:text-[var(--color-accent)]"
+                style={{
+                  transition: "color 0.3s var(--ease-out), background-color 0.3s var(--ease-out)",
+                }}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+
+          {/* Phone */}
+          <a
+            href={`tel:${contacts.phoneRaw}`}
+            className="flex items-center gap-2 text-[13px] font-semibold tracking-wide text-[var(--color-accent)] cursor-pointer shrink-0 hover:opacity-80 active:scale-[0.97]"
+            style={{
+              transition: "opacity 0.3s var(--ease-out), transform 0.15s var(--ease-out)",
+            }}
+          >
+            <Phone size={14} strokeWidth={2.5} />
+            {contacts.phone}
+          </a>
+        </nav>
+      </header>
+
+      {/* ─── Mobile floating pill header ─── */}
+      <header
+        className="fixed top-3 left-3 right-3 z-40 md:hidden rounded-full border border-[var(--color-border)] backdrop-blur-xl"
+        style={{
+          backgroundColor: scrolled || isOpen
+            ? "rgba(28, 32, 48, 0.92)"
+            : "rgba(28, 32, 48, 0.80)",
+          boxShadow: scrolled
+            ? "0 8px 32px rgba(0,0,0,0.5)"
+            : "0 4px 16px rgba(0,0,0,0.2)",
+          transition: "background-color 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out)",
+        }}
+      >
+        <div className="flex items-center justify-between px-5 h-14">
           {/* Logo */}
           <Link href="/" className="cursor-pointer" onClick={closeMenu}>
             <Image
               src="/images/logo.svg"
               alt="Адвокат Левченко"
-              width={130}
+              width={140}
               height={40}
-              className="h-9 w-auto"
-              priority
+              className="h-8 w-auto"
+              preload
             />
           </Link>
 
           {/* Hamburger / X morph button */}
           <button
             type="button"
-            className="relative w-11 h-11 flex items-center justify-center cursor-pointer rounded-lg"
+            className="relative w-11 h-11 flex items-center justify-center cursor-pointer rounded-full hover:bg-white/5 active:scale-[0.97]"
             style={{
-              transition: "background-color 0.3s var(--ease-out)",
+              transition: "background-color 0.3s var(--ease-out), transform 0.15s var(--ease-out)",
             }}
             onClick={() => setIsOpen((prev) => !prev)}
             aria-label={isOpen ? "Закрити меню" : "Відкрити меню"}
             aria-expanded={isOpen}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "var(--color-glass)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "transparent";
-            }}
-            onMouseDown={(e) => {
-              e.currentTarget.style.transform = "scale(0.98)";
-            }}
-            onMouseUp={(e) => {
-              e.currentTarget.style.transform = "scale(1)";
-            }}
           >
-            {/* Three bars that morph into X */}
             <div className="relative w-5 h-3.5">
               {/* Top bar */}
               <span
@@ -202,18 +169,18 @@ export default function Header() {
 
       {/* ─── Mobile menu overlay ─── */}
       <div
-        className="fixed inset-0 z-40 md:hidden flex flex-col"
+        className="fixed inset-0 z-30 md:hidden flex flex-col"
         style={{
-          background: "rgba(0, 0, 0, 0.92)",
-          backdropFilter: "blur(24px) saturate(1.5)",
-          WebkitBackdropFilter: "blur(24px) saturate(1.5)",
-          opacity: isOpen ? 1 : 0,
+          background: "var(--color-bg-deep, #0A0D15)",
+          opacity: isOpen ? 0.95 : 0,
+          backdropFilter: "blur(32px)",
+          WebkitBackdropFilter: "blur(32px)",
           pointerEvents: isOpen ? "auto" : "none",
-          transition: "opacity 0.4s var(--ease-drawer)",
+          transition: "opacity 0.4s var(--ease-out)",
         }}
       >
-        {/* Spacer for header height */}
-        <div className="h-16 shrink-0" />
+        {/* Spacer for pill header */}
+        <div className="h-20 shrink-0" />
 
         {/* Nav links with staggered reveal */}
         <nav className="flex-1 flex flex-col justify-center px-8 gap-2">
@@ -221,19 +188,13 @@ export default function Header() {
             <Link
               key={item.href}
               href={item.href}
-              className="block py-4 min-h-[44px] text-2xl font-medium text-[var(--color-foreground)] cursor-pointer"
+              className="block py-4 min-h-[44px] text-2xl font-medium text-[var(--color-foreground)] cursor-pointer hover:text-[var(--color-accent)]"
               style={{
                 transform: isOpen ? "translateY(0)" : "translateY(20px)",
                 opacity: isOpen ? 1 : 0,
-                transition: `transform 0.5s var(--ease-drawer) ${isOpen ? index * 60 : 0}ms, opacity 0.4s var(--ease-drawer) ${isOpen ? index * 60 : 0}ms`,
+                transition: `transform 0.5s var(--ease-out) ${isOpen ? index * 80 : 0}ms, opacity 0.4s var(--ease-out) ${isOpen ? index * 80 : 0}ms`,
               }}
               onClick={closeMenu}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = "var(--color-accent)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = "var(--color-foreground)";
-              }}
             >
               {item.label}
             </Link>
@@ -246,20 +207,14 @@ export default function Header() {
           style={{
             transform: isOpen ? "translateY(0)" : "translateY(20px)",
             opacity: isOpen ? 1 : 0,
-            transition: `transform 0.5s var(--ease-drawer) ${isOpen ? navigation.main.length * 60 + 40 : 0}ms, opacity 0.4s var(--ease-drawer) ${isOpen ? navigation.main.length * 60 + 40 : 0}ms`,
+            transition: `transform 0.5s var(--ease-out) ${isOpen ? navigation.main.length * 80 + 40 : 0}ms, opacity 0.4s var(--ease-out) ${isOpen ? navigation.main.length * 80 + 40 : 0}ms`,
           }}
         >
           <a
             href={`tel:${contacts.phoneRaw}`}
-            className="inline-flex items-center gap-3 text-lg font-semibold text-[var(--color-accent)] cursor-pointer min-h-[44px]"
+            className="inline-flex items-center gap-3 text-lg font-semibold text-[var(--color-accent)] cursor-pointer min-h-[44px] active:scale-[0.97]"
             style={{
               transition: "opacity 0.3s var(--ease-out), transform 0.15s var(--ease-out)",
-            }}
-            onMouseDown={(e) => {
-              e.currentTarget.style.transform = "scale(0.98)";
-            }}
-            onMouseUp={(e) => {
-              e.currentTarget.style.transform = "scale(1)";
             }}
           >
             <Phone size={18} strokeWidth={2.5} />
