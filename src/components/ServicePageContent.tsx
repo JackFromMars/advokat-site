@@ -5,9 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { Phone, CheckCircle, ChevronDown } from "lucide-react";
 import type { Service } from "@/data/services";
+import { services } from "@/data/services";
 import type { PlaceDetails } from "@/lib/google-places";
 import { contacts } from "@/data/contacts";
-import { navigation } from "@/data/navigation";
 import Breadcrumbs from "./Breadcrumbs";
 import ContactForm from "./ContactForm";
 import Reviews from "./Reviews";
@@ -108,7 +108,7 @@ export default function ServicePageContent({ service, reviews }: ServicePageCont
   const revealStyle = (delay: number) =>
     mounted ? { transitionDelay: `${delay}ms` } : {};
 
-  const otherServices = navigation.services.filter((s) => s.href !== `/${service.slug}`);
+  const otherServices = services.filter((s) => s.slug !== service.slug);
 
   return (
     <>
@@ -135,35 +135,27 @@ export default function ServicePageContent({ service, reviews }: ServicePageCont
         {/* Content */}
         <div className="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 pb-16 sm:pb-20 lg:pb-24 pt-28 sm:pt-36">
           <div className={`mb-4 ${reveal(0)}`} style={revealStyle(0)}>
-            <Breadcrumbs items={[{ label: service.title }]} />
-          </div>
-
-          <div
-            className={`icon-container-lg mb-6 ${reveal(80)}`}
-            style={revealStyle(80)}
-          >
-            <ServiceIcon slug={service.slug} size={28} />
+            <Breadcrumbs items={[{ label: service.shortTitle }]} />
           </div>
 
           <h1
-            className={`font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight text-[var(--color-foreground)] max-w-4xl ${reveal(160)}`}
-            style={revealStyle(160)}
+            className={`font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight text-[var(--color-foreground)] max-w-4xl ${reveal(120)}`}
+            style={revealStyle(120)}
           >
-            {service.title}{" "}
-            <span className="gold-gradient">у Чернівцях</span>
+            {service.title}
           </h1>
 
           <p
-            className={`mt-6 text-lg md:text-xl text-[var(--color-foreground-secondary)] max-w-3xl leading-relaxed ${reveal(240)}`}
-            style={revealStyle(240)}
+            className={`mt-6 text-lg md:text-xl text-[var(--color-foreground-secondary)] max-w-3xl leading-relaxed ${reveal(200)}`}
+            style={revealStyle(200)}
           >
             {service.description}
           </p>
 
           {/* Hero CTA */}
           <div
-            className={`mt-8 flex flex-wrap gap-4 ${reveal(320)}`}
-            style={revealStyle(320)}
+            className={`mt-8 flex flex-wrap gap-4 ${reveal(280)}`}
+            style={revealStyle(280)}
           >
             <a
               href={`tel:${contacts.phoneRaw}`}
@@ -174,7 +166,7 @@ export default function ServicePageContent({ service, reviews }: ServicePageCont
               Безкоштовна консультація
             </a>
             <a
-              href="/#contacts"
+              href="#service-cta"
               className="inline-flex items-center gap-2 py-3.5 px-7 border border-[var(--color-border)] hover:border-[var(--color-accent)]/40 text-[var(--color-foreground)] font-semibold rounded-full active:scale-[0.97] min-h-[48px]"
               style={{ transition: "border-color 300ms var(--ease-out), transform 150ms var(--ease-out)" }}
             >
@@ -253,11 +245,11 @@ export default function ServicePageContent({ service, reviews }: ServicePageCont
         <section ref={advantagesRef} className="py-20 md:py-28 lg:py-32">
           <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-              {/* Left — photo */}
+              {/* Left — thematic image */}
               <div className="reveal stagger-1 relative aspect-[4/3] rounded-2xl overflow-hidden">
                 <Image
-                  src="/images/photo.jpg"
-                  alt={contacts.name}
+                  src={service.heroImage || "/images/hero-1.png"}
+                  alt={service.title}
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 50vw"
@@ -362,22 +354,31 @@ export default function ServicePageContent({ service, reviews }: ServicePageCont
       <section ref={otherRef} className="py-16 md:py-20 lg:py-24 border-t border-[var(--color-border)]">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
           <div className="text-center mb-10 md:mb-14">
-            <h2 className="reveal stagger-1 font-heading text-2xl md:text-3xl font-bold text-[var(--color-foreground)]">
+            <span className="reveal stagger-1 eyebrow inline-block mb-4">Напрямки практики</span>
+            <h2 className="reveal stagger-2 font-heading text-2xl md:text-3xl font-bold text-[var(--color-foreground)]">
               Інші <span className="gold-gradient">послуги</span>
             </h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
             {otherServices.map((s, i) => (
               <Link
-                key={s.href}
-                href={s.href}
-                className={`reveal stagger-${Math.min(i + 2, 8)} card p-5 cursor-pointer group`}
+                key={s.slug}
+                href={`/${s.slug}`}
+                className={`reveal stagger-${Math.min(i + 1, 8)} card p-5 md:p-6 cursor-pointer group`}
               >
-                <span className="text-[var(--color-foreground)] font-medium group-hover:text-[var(--color-accent)] text-sm"
+                <div className="icon-container mb-4 group-hover:scale-105"
+                  style={{ transition: "transform 0.4s var(--ease-out)" }}
+                >
+                  <ServiceIcon slug={s.slug} size={20} />
+                </div>
+                <h3 className="font-heading text-base font-semibold text-[var(--color-foreground)] group-hover:text-[var(--color-accent)] mb-1.5"
                   style={{ transition: "color 0.3s var(--ease-out)" }}
                 >
-                  {s.label}
-                </span>
+                  {s.shortTitle}
+                </h3>
+                <p className="text-[var(--color-muted)] text-xs leading-relaxed line-clamp-2">
+                  {s.description.slice(0, 80)}...
+                </p>
               </Link>
             ))}
           </div>
@@ -385,7 +386,7 @@ export default function ServicePageContent({ service, reviews }: ServicePageCont
       </section>
 
       {/* ═══════════ CTA ═══════════ */}
-      <section ref={ctaRef} className="section-glow py-20 md:py-28 lg:py-32">
+      <section id="service-cta" ref={ctaRef} className="section-glow py-20 md:py-28 lg:py-32">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
           <div className="text-center mb-10 md:mb-14">
             <p className="reveal stagger-1 eyebrow mb-4">Зворотний зв&apos;язок</p>
