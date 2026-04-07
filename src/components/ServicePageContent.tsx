@@ -5,15 +5,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { Phone, CheckCircle, ChevronDown } from "lucide-react";
 import type { Service } from "@/data/services";
+import type { PlaceDetails } from "@/lib/google-places";
 import { contacts } from "@/data/contacts";
 import { navigation } from "@/data/navigation";
 import Breadcrumbs from "./Breadcrumbs";
 import ContactForm from "./ContactForm";
+import Reviews from "./Reviews";
 import ServiceIcon from "@/components/icons/ServiceIcons";
 import AnimatedCounter from "./AnimatedCounter";
 
 interface ServicePageContentProps {
   service: Service;
+  reviews?: PlaceDetails | null;
 }
 
 /* ── Scroll reveal hook ── */
@@ -77,7 +80,7 @@ function FAQAccordionItem({ q, a, index }: { q: string; a: string; index: number
   );
 }
 
-export default function ServicePageContent({ service }: ServicePageContentProps) {
+export default function ServicePageContent({ service, reviews }: ServicePageContentProps) {
   const heroRef = useRef<HTMLElement>(null);
   const statsRef = useRef<HTMLElement>(null);
   const subServicesRef = useRef<HTMLElement>(null);
@@ -351,6 +354,9 @@ export default function ServicePageContent({ service }: ServicePageContentProps)
           </div>
         </section>
       )}
+
+      {/* ═══════════ REVIEWS ═══════════ */}
+      <Reviews data={reviews ?? null} />
 
       {/* ═══════════ OTHER SERVICES ═══════════ */}
       <section ref={otherRef} className="py-16 md:py-20 lg:py-24 border-t border-[var(--color-border)]">
