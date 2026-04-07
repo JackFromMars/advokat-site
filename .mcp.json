@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "nano_banana": {
+      "type": "stdio",
+      "command": "C:\\Program Files\\nodejs\\node.exe",
+      "args": ["D:\\nano-banana-mcp\\mcp-server.js"]
+    },
+    "gemini_imagen": {
+      "type": "stdio",
+      "command": "C:\\Program Files\\nodejs\\node.exe",
+      "args": ["D:\\gemini-imagen-mcp\\mcp-server.js"],
+      "env": {
+        "GEMINI_API_KEY": "AIzaSyDNjrnKPlP4hG2qoGDmL-9d7nU7sbEPk9I"
+      }
+    }
+  }
+}
