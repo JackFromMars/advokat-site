@@ -14,48 +14,58 @@ export default function ServicePageContent({
 }: ServicePageContentProps) {
   return (
     <>
-      <section className="section-bg pt-6 sm:pt-8 pb-12 md:pb-20">
+      {/* Hero area */}
+      <section className="pt-28 pb-16 md:pt-36 md:pb-24 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Breadcrumbs items={[{ label: service.title }]} />
 
-          <div className="mt-6 sm:mt-8 mb-8 sm:mb-12">
-            <div className="icon-container-lg mb-4 sm:mb-6">
+          <div className="mt-8 md:mt-12 mb-12 md:mb-16">
+            <div className="icon-container-lg mb-6">
               <ServiceIcon slug={service.slug} size={28} />
             </div>
-            <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6">
+
+            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--color-foreground)] mb-6">
               {service.title}
             </h1>
-            <p className="text-lg text-[var(--color-muted)] max-w-3xl leading-relaxed">
+
+            <p className="text-[var(--color-foreground-secondary)] text-lg max-w-3xl leading-relaxed">
               {service.description}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+          {/* Sub-services grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             {service.subServices.map((sub) => (
-              <div key={sub.title} className="glass glass-hover p-4 sm:p-6">
-                <h2 className="font-heading text-lg font-semibold text-white mb-3">
-                  {sub.title}
-                </h2>
-                <p className="text-[var(--color-muted)] text-sm leading-relaxed">
-                  {sub.description}
-                </p>
+              <div key={sub.title} className="card-premium">
+                <div className="card-premium-inner p-6 md:p-8">
+                  <h2 className="font-heading text-lg md:text-xl font-semibold text-[var(--color-foreground)] mb-3">
+                    {sub.title}
+                  </h2>
+                  <p className="text-[var(--color-foreground-secondary)] text-sm leading-relaxed">
+                    {sub.description}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* FAQ section */}
       {service.faq.length > 0 && (
         <FAQ items={service.faq as FAQItem[]} title="Часті питання" />
       )}
 
-      <section className="py-16 md:py-20">
+      {/* CTA section */}
+      <section className="section-glow py-20 md:py-28 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
-              Потрібна <span className="gold-gradient">допомога</span>?
+          <div className="text-center mb-10 md:mb-14">
+            <p className="eyebrow mb-4">Зворотний зв&apos;язок</p>
+            <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4">
+              Потрібна{" "}
+              <span className="gold-gradient">допомога</span>?
             </h2>
-            <p className="text-[var(--color-muted)]">
+            <p className="text-[var(--color-foreground-secondary)] text-lg max-w-xl mx-auto">
               Залиште заявку — проконсультую безкоштовно
             </p>
           </div>

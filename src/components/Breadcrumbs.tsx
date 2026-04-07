@@ -7,23 +7,23 @@ interface BreadcrumbsProps {
 
 export default function Breadcrumbs({ items }: BreadcrumbsProps) {
   return (
-    <nav aria-label="Breadcrumb" className="py-4">
-      <ol className="flex items-center gap-2 text-sm text-[var(--color-muted)] flex-wrap">
+    <nav aria-label="Breadcrumb">
+      <ol className="flex items-center gap-1.5 text-[13px] text-[var(--color-muted)] flex-wrap">
         <li>
           <Link
             href="/"
-            className="cursor-pointer hover:text-[var(--color-foreground)] transition-colors"
+            className="cursor-pointer hover:text-[var(--color-accent)] transition-colors duration-200"
           >
             Головна
           </Link>
         </li>
         {items.map((item, index) => (
-          <li key={index} className="flex items-center gap-2">
-            <ChevronRight size={14} className="text-[var(--color-muted)]" />
+          <li key={index} className="flex items-center gap-1.5">
+            <ChevronRight size={12} className="text-[var(--color-muted)] shrink-0" />
             {item.href ? (
               <Link
                 href={item.href}
-                className="cursor-pointer hover:text-[var(--color-foreground)] transition-colors"
+                className="cursor-pointer hover:text-[var(--color-accent)] transition-colors duration-200"
               >
                 {item.label}
               </Link>

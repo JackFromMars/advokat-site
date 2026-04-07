@@ -30,11 +30,13 @@ export default async function Home() {
       <Reviews data={reviews} />
       <FAQ items={generalFAQ} />
       <Map />
-      <section id="contacts" className="py-16 md:py-20">
+      <section id="contacts" className="section-glow py-20 md:py-28 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <h2 className="font-heading text-3xl md:text-4xl font-bold text-white mb-4">
-              Зв&#39;яжіться <span className="gold-gradient">зі мною</span>
+          <div className="text-center mb-10 md:mb-14">
+            <p className="eyebrow mb-4">Зворотний зв&apos;язок</p>
+            <h2 className="font-heading text-3xl md:text-4xl font-bold">
+              Зв&apos;яжіться{" "}
+              <span className="gold-gradient">зі мною</span>
             </h2>
           </div>
           <ContactForm variant="section" />
