@@ -1,28 +1,66 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Check } from "lucide-react";
 
 interface ContactFormProps {
   variant?: "hero" | "section";
 }
 
-function formatPhone(value: string): string {
-  const digits = value.replace(/\D/g, "");
+const PHONE_PREFIX = "+38 ";
 
-  let d = digits;
-  if (d.startsWith("380")) d = d.slice(3);
-  else if (d.startsWith("80")) d = d.slice(2);
-  else if (d.startsWith("0")) d = d.slice(1);
-
+function formatDigits(d: string): string {
   let formatted = "+38";
   if (d.length > 0) formatted += " (0" + d.slice(0, 2);
   if (d.length >= 2) formatted += ") ";
   if (d.length > 2) formatted += d.slice(2, 5);
   if (d.length > 5) formatted += "-" + d.slice(5, 7);
   if (d.length > 7) formatted += "-" + d.slice(7, 9);
-
   return formatted;
+}
+
+function extractSubscriberDigits(value: string): string {
+  const allDigits = value.replace(/\D/g, "");
+  let d = allDigits;
+  if (d.startsWith("380")) d = d.slice(3);
+  else if (d.startsWith("80")) d = d.slice(2);
+  else if (d.startsWith("0")) d = d.slice(1);
+  return d.slice(0, 9);
+}
+
+/** Map a cursor position in formatted string to the digit index it sits after */
+function cursorToDigitIndex(formatted: string, cursor: number): number {
+  let digitIndex = 0;
+  // Count subscriber digits before cursor
+  // First skip the "+38" prefix digits
+  let prefixDigitsToSkip = 2; // "3" and "8"
+  for (let i = 0; i < cursor && i < formatted.length; i++) {
+    if (/\d/.test(formatted[i])) {
+      if (prefixDigitsToSkip > 0) {
+        prefixDigitsToSkip--;
+      } else {
+        digitIndex++;
+      }
+    }
+  }
+  return digitIndex;
+}
+
+/** Map a digit index back to cursor position in formatted string */
+function digitIndexToCursor(formatted: string, targetDigitIndex: number): number {
+  let digitIndex = 0;
+  let prefixDigitsToSkip = 2; // "3" and "8"
+  for (let i = 0; i < formatted.length; i++) {
+    if (digitIndex >= targetDigitIndex) return i;
+    if (/\d/.test(formatted[i])) {
+      if (prefixDigitsToSkip > 0) {
+        prefixDigitsToSkip--;
+      } else {
+        digitIndex++;
+      }
+    }
+  }
+  return formatted.length;
 }
 
 function toE164(formatted: string): string {
@@ -39,6 +77,74 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [fieldErrors, setFieldErrors] = useState<{ name?: string; phone?: string }>({});
   const sectionRef = useRef<HTMLDivElement>(null);
+  const phoneRef = useRef<HTMLInputElement>(null);
+  const pendingCursor = useRef<number | null>(null);
+
+  // Restore cursor position after React re-renders the formatted value
+  useEffect(() => {
+    if (pendingCursor.current !== null && phoneRef.current) {
+      const pos = pendingCursor.current;
+      phoneRef.current.setSelectionRange(pos, pos);
+      pendingCursor.current = null;
+    }
+  }, [phone]);
+
+  const handlePhoneChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target;
+    const rawValue = input.value;
+    const cursorPos = input.selectionStart ?? rawValue.length;
+
+    const newDigits = extractSubscriberDigits(rawValue);
+    const formatted = formatDigits(newDigits);
+
+    // Figure out where cursor should land in the new formatted string
+    const digitIdx = cursorToDigitIndex(rawValue, cursorPos);
+    const newCursorPos = digitIndexToCursor(formatted, digitIdx);
+
+    pendingCursor.current = newCursorPos;
+    setPhone(formatted);
+    if (fieldErrors.phone) setFieldErrors((p) => ({ ...p, phone: undefined }));
+  }, [fieldErrors.phone]);
+
+  const handlePhoneKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== "Backspace") return;
+
+    const input = e.currentTarget;
+    const cursor = input.selectionStart ?? 0;
+    const selEnd = input.selectionEnd ?? 0;
+
+    // If there's a selection, let default behavior handle it
+    if (cursor !== selEnd) return;
+
+    // Don't delete into the "+38 " prefix
+    if (cursor <= PHONE_PREFIX.length) {
+      e.preventDefault();
+      return;
+    }
+
+    const currentFormatted = phone;
+    const charBeforeCursor = currentFormatted[cursor - 1];
+
+    // If the character before cursor is a formatting char (not a digit),
+    // we need to skip back to the previous digit and delete it
+    if (charBeforeCursor && !/\d/.test(charBeforeCursor)) {
+      e.preventDefault();
+
+      // Find the digit index that sits just before the cursor
+      const digitIdx = cursorToDigitIndex(currentFormatted, cursor);
+      if (digitIdx <= 0) return; // nothing to delete
+
+      // Remove that digit
+      const digits = extractSubscriberDigits(currentFormatted);
+      const newDigits = digits.slice(0, digitIdx - 1) + digits.slice(digitIdx);
+      const newFormatted = formatDigits(newDigits);
+
+      // Place cursor after the digit before the one we removed
+      const newCursorPos = digitIndexToCursor(newFormatted, digitIdx - 1);
+      pendingCursor.current = newCursorPos;
+      setPhone(newFormatted);
+    }
+  }, [phone]);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -141,8 +247,8 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
 
     if (variant === "hero") {
       return (
-        <div ref={sectionRef} className="max-w-sm">
-          <div className="card p-4 md:p-6">
+        <div ref={sectionRef}>
+          <div className="card p-5 md:p-7">
             {successContent}
           </div>
         </div>
@@ -209,14 +315,12 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
       {/* Phone field */}
       <div>
         <input
+          ref={phoneRef}
           type="tel"
           placeholder="+38 (0XX) XXX-XX-XX"
           value={phone}
-          onChange={(e) => {
-            const formatted = formatPhone(e.target.value);
-            setPhone(formatted);
-            if (fieldErrors.phone) setFieldErrors((p) => ({ ...p, phone: undefined }));
-          }}
+          onChange={handlePhoneChange}
+          onKeyDown={handlePhoneKeyDown}
           maxLength={19}
           required
           className={inputClasses}
@@ -266,8 +370,8 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
 
   if (variant === "hero") {
     return (
-      <div ref={sectionRef} className="max-w-sm">
-        <div className="card p-4 md:p-6">
+      <div ref={sectionRef}>
+        <div className="card p-5 md:p-7">
           {formContent}
         </div>
       </div>

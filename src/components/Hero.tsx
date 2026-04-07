@@ -156,9 +156,7 @@ export default function Hero() {
             className={`hidden lg:block lg:col-span-5 ${reveal(400)}`}
             style={revealStyle(400)}
           >
-            <div className="card">
-              <ContactForm variant="hero" />
-            </div>
+            <ContactForm variant="hero" />
           </div>
         </div>
       </div>
