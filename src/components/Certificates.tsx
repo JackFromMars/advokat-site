@@ -237,12 +237,12 @@ export default function Certificates() {
                 </button>
               </div>
 
-              {/* Caption — fixed height to prevent layout shift */}
-              <div className="p-4 md:p-5 h-[88px] md:h-[80px]">
-                <h3 className="font-heading text-base md:text-lg font-semibold text-[var(--color-foreground)] mb-1 line-clamp-2">
+              {/* Caption — fixed height for up to 3 lines */}
+              <div className="p-4 md:p-5 h-[110px] md:h-[100px]">
+                <h3 className="font-heading text-base md:text-lg font-semibold text-[var(--color-foreground)] mb-1">
                   {cert.title}
                 </h3>
-                <p className="text-[var(--color-muted)] text-sm truncate">
+                <p className="text-[var(--color-muted)] text-sm">
                   {cert.org} &bull; {cert.year}
                 </p>
               </div>
