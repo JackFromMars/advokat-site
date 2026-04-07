@@ -16,7 +16,7 @@ export const zhytloviSuperechky: Service = {
   metaDescription:
     "Адвокат з житлових спорів у Чернівцях — Левченко. Виселення, право власності на квартиру, земельні спори, ОСББ, реєстрація нерухомості. 200+ виграних справ. Консультація безкоштовно.",
   icon: "🏠",
-  heroImage: "/images/hero-2.png",
+  heroImage: "/images/service-housing.png",
   isPrimary: true,
   keywords: [
     "житлові спори Чернівці",

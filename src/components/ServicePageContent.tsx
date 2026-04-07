@@ -245,11 +245,11 @@ export default function ServicePageContent({ service, reviews }: ServicePageCont
         <section ref={advantagesRef} className="py-20 md:py-28 lg:py-32">
           <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-              {/* Left — thematic image */}
+              {/* Left — lawyer photo */}
               <div className="reveal stagger-1 relative aspect-[4/3] rounded-2xl overflow-hidden">
                 <Image
-                  src={service.heroImage || "/images/hero-1.png"}
-                  alt={service.title}
+                  src="/images/photo.jpg"
+                  alt={contacts.name}
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 50vw"

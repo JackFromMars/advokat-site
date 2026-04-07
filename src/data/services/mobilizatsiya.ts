@@ -16,7 +16,7 @@ export const mobilizatsiya: Service = {
   metaDescription:
     "Військовий адвокат у Чернівцях — мобілізація, відстрочка, оскарження рішень ВЛК та ТЦК, демобілізація, бронювання працівників. Досвідчений юрист з військового права. Консультація та захист у суді.",
   icon: "🛡️",
-  heroImage: "/images/hero-3.png",
+  heroImage: "/images/service-military.png",
   isPrimary: true,
   keywords: [
     "мобілізація Чернівці",

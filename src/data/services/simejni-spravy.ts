@@ -16,7 +16,7 @@ export const simejniSpravy: Service = {
   metaDescription:
     "Сімейний адвокат у Чернівцях — Левченко. Розлучення, аліменти, поділ майна, спори про дітей, шлюбний договір, спадщина. 23+ років досвіду, 500+ виграних справ. Безкоштовна консультація.",
   icon: "👨‍👩‍👧‍👦",
-  heroImage: "/images/hero-1.png",
+  heroImage: "/images/service-family.png",
   isPrimary: true,
   keywords: [
     "сімейний адвокат Чернівці",
