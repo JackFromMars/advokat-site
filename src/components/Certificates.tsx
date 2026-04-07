@@ -74,6 +74,9 @@ export default function Certificates() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
+  const touchStart = useRef<number | null>(null);
+  const touchStartTime = useRef<number>(0);
+  const didSwipe = useRef(false);
 
   // Auto-advance
   useEffect(() => {
@@ -159,7 +162,29 @@ export default function Certificates() {
             {/* ── Main slide ── */}
             <div
               className="card overflow-hidden cursor-pointer group"
-              onClick={() => openLightbox(current)}
+              onClick={() => {
+                if (!didSwipe.current) openLightbox(current);
+                didSwipe.current = false;
+              }}
+              onTouchStart={(e) => {
+                touchStart.current = e.touches[0].clientX;
+                touchStartTime.current = Date.now();
+                didSwipe.current = false;
+              }}
+              onTouchEnd={(e) => {
+                if (touchStart.current === null) return;
+                const diff = touchStart.current - e.changedTouches[0].clientX;
+                const elapsed = Date.now() - touchStartTime.current;
+                touchStart.current = null;
+                if (Math.abs(diff) > 40 && elapsed < 500) {
+                  didSwipe.current = true;
+                  if (diff > 0) {
+                    setCurrent((p) => (p + 1) % certificates.length);
+                  } else {
+                    setCurrent((p) => (p - 1 + certificates.length) % certificates.length);
+                  }
+                }
+              }}
             >
               {/* Image */}
               <div className="relative aspect-[16/10] md:aspect-[16/9] overflow-hidden bg-[var(--color-bg-base)]">
