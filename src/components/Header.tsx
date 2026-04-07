@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Phone } from "lucide-react";
+import { Phone, ChevronDown } from "lucide-react";
 import { navigation } from "@/data/navigation";
 import { contacts } from "@/data/contacts";
 import { TelegramIcon, ViberIcon, WhatsAppIcon } from "@/components/icons/MessengerIcons";
@@ -11,6 +11,10 @@ import { TelegramIcon, ViberIcon, WhatsAppIcon } from "@/components/icons/Messen
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const servicesTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const servicesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,7 +36,19 @@ export default function Header() {
     };
   }, [isOpen]);
 
-  const closeMenu = useCallback(() => setIsOpen(false), []);
+  const closeMenu = useCallback(() => {
+    setIsOpen(false);
+    setMobileServicesOpen(false);
+  }, []);
+
+  const handleServicesEnter = useCallback(() => {
+    if (servicesTimeout.current) clearTimeout(servicesTimeout.current);
+    setServicesOpen(true);
+  }, []);
+
+  const handleServicesLeave = useCallback(() => {
+    servicesTimeout.current = setTimeout(() => setServicesOpen(false), 200);
+  }, []);
 
   return (
     <>
@@ -69,18 +85,81 @@ export default function Header() {
 
           {/* Center nav links */}
           <div className="flex items-center gap-1">
-            {navigation.main.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="px-3 py-2 text-[13px] uppercase tracking-[0.08em] font-medium text-[var(--color-foreground-secondary)] rounded-full cursor-pointer hover:text-[var(--color-accent)]"
-                style={{
-                  transition: "color 0.3s var(--ease-out), background-color 0.3s var(--ease-out)",
-                }}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navigation.main.map((item) =>
+              item.label === "Послуги" ? (
+                /* Services dropdown */
+                <div
+                  key={item.href}
+                  className="relative"
+                  ref={servicesRef}
+                  onMouseEnter={handleServicesEnter}
+                  onMouseLeave={handleServicesLeave}
+                >
+                  <Link
+                    href={item.href}
+                    className="px-3 py-2 text-[13px] uppercase tracking-[0.08em] font-medium text-[var(--color-foreground-secondary)] rounded-full cursor-pointer hover:text-[var(--color-accent)] inline-flex items-center gap-1"
+                    style={{
+                      transition: "color 0.3s var(--ease-out)",
+                    }}
+                  >
+                    {item.label}
+                    <ChevronDown
+                      size={12}
+                      strokeWidth={2.5}
+                      className="transition-transform duration-300"
+                      style={{
+                        transform: servicesOpen ? "rotate(180deg)" : "rotate(0)",
+                      }}
+                    />
+                  </Link>
+
+                  {/* Dropdown */}
+                  <div
+                    className="absolute top-full left-1/2 -translate-x-1/2 pt-3"
+                    style={{
+                      opacity: servicesOpen ? 1 : 0,
+                      transform: servicesOpen
+                        ? "translateY(0) scale(1)"
+                        : "translateY(-4px) scale(0.97)",
+                      pointerEvents: servicesOpen ? "auto" : "none",
+                      transition: "opacity 0.25s var(--ease-out), transform 0.25s var(--ease-out)",
+                    }}
+                  >
+                    <div
+                      className="rounded-2xl border border-[var(--color-border)] backdrop-blur-xl py-2 min-w-[260px]"
+                      style={{
+                        backgroundColor: "rgba(28, 32, 48, 0.95)",
+                        boxShadow: "0 16px 48px rgba(0,0,0,0.5), inset 0 0.5px 0 rgba(255,255,255,0.06)",
+                      }}
+                    >
+                      {navigation.services.map((service) => (
+                        <Link
+                          key={service.href}
+                          href={service.href}
+                          className="block px-5 py-2.5 text-sm text-[var(--color-foreground-secondary)] hover:text-[var(--color-accent)] hover:bg-white/[0.03] cursor-pointer"
+                          style={{
+                            transition: "color 0.2s var(--ease-out), background-color 0.2s var(--ease-out)",
+                          }}
+                        >
+                          {service.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="px-3 py-2 text-[13px] uppercase tracking-[0.08em] font-medium text-[var(--color-foreground-secondary)] rounded-full cursor-pointer hover:text-[var(--color-accent)]"
+                  style={{
+                    transition: "color 0.3s var(--ease-out), background-color 0.3s var(--ease-out)",
+                  }}
+                >
+                  {item.label}
+                </Link>
+              )
+            )}
           </div>
 
           {/* Phone */}
@@ -184,35 +263,91 @@ export default function Header() {
         <div className="h-20 shrink-0" />
 
         {/* Nav links with staggered reveal */}
-        <nav className="flex-1 flex flex-col justify-center px-8 gap-2">
-          {navigation.main.map((item, index) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="block py-4 min-h-[44px] text-2xl font-medium text-[var(--color-foreground)] cursor-pointer hover:text-[var(--color-accent)]"
-              style={{
-                transform: isOpen ? "translateY(0)" : "translateY(20px)",
-                opacity: isOpen ? 1 : 0,
-                transition: `transform 0.5s var(--ease-out) ${isOpen ? index * 80 : 0}ms, opacity 0.4s var(--ease-out) ${isOpen ? index * 80 : 0}ms`,
-              }}
-              onClick={closeMenu}
-            >
-              {item.label}
-            </Link>
-          ))}
+        <nav className="flex-1 overflow-y-auto px-8 pt-2 pb-4">
+          {navigation.main.map((item, index) =>
+            item.label === "Послуги" ? (
+              <div key={item.href}>
+                {/* Services toggle */}
+                <button
+                  type="button"
+                  className="w-full flex items-center justify-between py-4 min-h-[44px] text-2xl font-medium text-[var(--color-foreground)] cursor-pointer hover:text-[var(--color-accent)]"
+                  style={{
+                    transform: isOpen ? "translateY(0)" : "translateY(20px)",
+                    opacity: isOpen ? 1 : 0,
+                    transition: `transform 0.5s var(--ease-out) ${isOpen ? index * 80 : 0}ms, opacity 0.4s var(--ease-out) ${isOpen ? index * 80 : 0}ms, color 0.3s var(--ease-out)`,
+                  }}
+                  onClick={() => setMobileServicesOpen((prev) => !prev)}
+                >
+                  {item.label}
+                  <ChevronDown
+                    size={20}
+                    strokeWidth={2}
+                    style={{
+                      transform: mobileServicesOpen ? "rotate(180deg)" : "rotate(0)",
+                      transition: "transform 0.3s var(--ease-out)",
+                    }}
+                  />
+                </button>
+
+                {/* Services submenu */}
+                <div
+                  className="overflow-hidden"
+                  style={{
+                    maxHeight: mobileServicesOpen ? `${navigation.services.length * 48 + 16}px` : "0",
+                    opacity: mobileServicesOpen ? 1 : 0,
+                    transition: "max-height 0.4s var(--ease-out), opacity 0.3s var(--ease-out)",
+                  }}
+                >
+                  <div className="pl-4 pb-2 border-l border-[var(--color-accent)]/20">
+                    {navigation.services.map((service, si) => (
+                      <Link
+                        key={service.href}
+                        href={service.href}
+                        className="block py-2.5 text-base text-[var(--color-foreground-secondary)] hover:text-[var(--color-accent)] cursor-pointer"
+                        style={{
+                          transform: mobileServicesOpen ? "translateX(0)" : "translateX(-8px)",
+                          opacity: mobileServicesOpen ? 1 : 0,
+                          transition: `transform 0.3s var(--ease-out) ${si * 40}ms, opacity 0.3s var(--ease-out) ${si * 40}ms, color 0.2s var(--ease-out)`,
+                        }}
+                        onClick={closeMenu}
+                      >
+                        {service.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="block py-4 min-h-[44px] text-2xl font-medium text-[var(--color-foreground)] cursor-pointer hover:text-[var(--color-accent)]"
+                style={{
+                  transform: isOpen ? "translateY(0)" : "translateY(20px)",
+                  opacity: isOpen ? 1 : 0,
+                  transition: `transform 0.5s var(--ease-out) ${isOpen ? index * 80 : 0}ms, opacity 0.4s var(--ease-out) ${isOpen ? index * 80 : 0}ms, color 0.3s var(--ease-out)`,
+                }}
+                onClick={closeMenu}
+              >
+                {item.label}
+              </Link>
+            )
+          )}
         </nav>
 
         {/* Messenger icons + Phone at bottom */}
         <div
-          className="px-8 pb-10"
+          className="px-8 pb-10 shrink-0"
           style={{
             transform: isOpen ? "translateY(0)" : "translateY(20px)",
             opacity: isOpen ? 1 : 0,
             transition: `transform 0.5s var(--ease-out) ${isOpen ? navigation.main.length * 80 + 40 : 0}ms, opacity 0.4s var(--ease-out) ${isOpen ? navigation.main.length * 80 + 40 : 0}ms`,
           }}
         >
-          {/* Messenger icons */}
-          <div className="flex items-center justify-center gap-5 pt-4 mb-5">
+          <div className="separator mb-6" />
+
+          {/* Messenger icons — left aligned with phone */}
+          <div className="flex items-center gap-5 mb-5">
             <a href={contacts.messengers.telegram} target="_blank" rel="noopener noreferrer"
                className="text-[var(--color-muted)] hover:text-[var(--color-accent)] transition-colors duration-300 cursor-pointer"
                aria-label="Telegram">
@@ -229,6 +364,7 @@ export default function Header() {
               <WhatsAppIcon size={22} />
             </a>
           </div>
+
           <a
             href={`tel:${contacts.phoneRaw}`}
             className="inline-flex items-center gap-3 text-lg font-semibold text-[var(--color-accent)] cursor-pointer min-h-[44px] active:scale-[0.97]"
