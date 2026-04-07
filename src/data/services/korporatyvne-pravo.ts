@@ -11,7 +11,7 @@ export const korporatyvnePravo: Service = {
   metaDescription:
     "Корпоративний адвокат у Чернівцях — реєстрація ТОВ та ФОП, господарські спори, юридичний супровід бізнесу, ліквідація підприємств. Досвід 15+ років. Консультація.",
   icon: "🏢",
-  heroImage: "/images/hero-3.png",
+  heroImage: "/images/hero-1.png",
   isPrimary: false,
   keywords: [
     "корпоративний адвокат Чернівці",

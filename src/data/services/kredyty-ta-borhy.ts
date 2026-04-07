@@ -11,7 +11,7 @@ export const kredytyTaBorhy: Service = {
   metaDescription:
     "Кредитний адвокат у Чернівцях ⭐ Захист від колекторів, реструктуризація кредитів, списання боргів, зупинення виконавчого провадження. Безкоштовна консультація ☎ Адвокат Левченко.",
   icon: "💰",
-  heroImage: "/images/hero-1.png",
+  heroImage: "/images/about-bg.png",
   isPrimary: false,
   keywords: [
     "кредитний адвокат Чернівці",
