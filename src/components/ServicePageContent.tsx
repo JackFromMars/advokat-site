@@ -11,6 +11,7 @@ import { contacts } from "@/data/contacts";
 import Breadcrumbs from "./Breadcrumbs";
 import ContactForm from "./ContactForm";
 import Reviews from "./Reviews";
+import Certificates from "./Certificates";
 import ServiceIcon from "@/components/icons/ServiceIcons";
 import AnimatedCounter from "./AnimatedCounter";
 
@@ -424,6 +425,9 @@ export default function ServicePageContent({ service, reviews }: ServicePageCont
           </div>
         </section>
       )}
+
+      {/* ═══════════ CERTIFICATES ═══════════ */}
+      <Certificates />
 
       {/* ═══════════ REVIEWS ═══════════ */}
       <Reviews data={reviews ?? null} />

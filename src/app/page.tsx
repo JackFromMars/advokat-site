@@ -3,6 +3,7 @@ import Stats from "@/components/Stats";
 import ServicesGrid from "@/components/ServicesGrid";
 import About from "@/components/About";
 import WorkStages from "@/components/WorkStages";
+import Certificates from "@/components/Certificates";
 import Reviews from "@/components/Reviews";
 import FAQ from "@/components/FAQ";
 import Map from "@/components/Map";
@@ -29,6 +30,7 @@ export default async function Home() {
       <ServicesGrid />
       <About />
       <WorkStages />
+      <Certificates />
       <Reviews data={reviews} />
       <FAQ items={generalFAQ} />
       <Map />
