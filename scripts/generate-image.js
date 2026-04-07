@@ -3,7 +3,7 @@ const { spawn } = require("child_process");
 const path = require("path");
 
 const GEMINI_SERVER = "D:/gemini-imagen-mcp/mcp-server.js";
-const API_KEY = "AIzaSyDNjrnKPlP4hG2qoGDmL-9d7nU7sbEPk9I";
+const API_KEY = process.env.GEMINI_API_KEY || "";
 
 function generateImage(prompt, outputPath, aspectRatio = "16:9") {
   return new Promise((resolve, reject) => {

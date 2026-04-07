@@ -16,7 +16,7 @@ export const mihratsijnePravo: Service = {
   metaDescription:
     "Міграційний адвокат у Чернівцях ⭐ Посвідка на проживання, громадянство України, дозвіл на імміграцію, візова підтримка. Оскарження відмов ДМС. Консультація ☎",
   icon: "✈️",
-  heroImage: "/images/hero-3.png",
+  heroImage: "/images/service-migration.png",
   isPrimary: false,
   keywords: [
     "міграційний адвокат Чернівці",

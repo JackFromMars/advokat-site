@@ -16,7 +16,7 @@ export const administratyvniSpravy: Service = {
   metaDescription:
     "Адвокат по адміністративних справах у Чернівцях. Оскарження рішень держорганів, штрафів ПДР, податкові та митні спори, дозвільні документи. Досвід понад 23 роки.",
   icon: "⚖️",
-  heroImage: "/images/hero-2.png",
+  heroImage: "/images/service-admin.png",
   isPrimary: false,
   keywords: [
     "адміністративний адвокат Чернівці",

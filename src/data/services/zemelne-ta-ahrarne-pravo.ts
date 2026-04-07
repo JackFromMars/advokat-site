@@ -16,7 +16,7 @@ export const zemelneTaAhrarnePravo: Service = {
   metaDescription:
     "Земельний адвокат у Чернівцях ⭐ Земельні спори, приватизація ділянок, оренда землі, зміна цільового призначення, аграрне право. Досвід понад 23 роки. Консультація.",
   icon: "🌾",
-  heroImage: "/images/services-bg.png",
+  heroImage: "/images/service-land.png",
   isPrimary: false,
   keywords: [
     "земельний адвокат Чернівці",
