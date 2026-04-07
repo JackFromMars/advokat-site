@@ -1,77 +1,69 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { Check } from "lucide-react";
 
 interface ContactFormProps {
   variant?: "hero" | "section";
 }
 
-const PHONE_PREFIX = "+38 ";
+/* ── Phone mask helpers ──
+   State stores only subscriber digits (up to 9), e.g. "951234567".
+   The "0" prefix and "+38" are added automatically during formatting.
+   Format: +38 (0XX) XXX-XX-XX
+*/
 
-function formatDigits(d: string): string {
-  let formatted = "+38";
-  if (d.length > 0) formatted += " (0" + d.slice(0, 2);
-  if (d.length >= 2) formatted += ") ";
-  if (d.length > 2) formatted += d.slice(2, 5);
-  if (d.length > 5) formatted += "-" + d.slice(5, 7);
-  if (d.length > 7) formatted += "-" + d.slice(7, 9);
-  return formatted;
+function formatSubscriber(d: string): string {
+  if (d.length === 0) return "";
+  let f = "+38 (0" + d.slice(0, 2);
+  if (d.length >= 2) f += ") ";
+  if (d.length > 2) f += d.slice(2, 5);
+  if (d.length > 5) f += "-" + d.slice(5, 7);
+  if (d.length > 7) f += "-" + d.slice(7, 9);
+  return f;
 }
 
-function extractSubscriberDigits(value: string): string {
-  const allDigits = value.replace(/\D/g, "");
-  let d = allDigits;
-  if (d.startsWith("380")) d = d.slice(3);
-  else if (d.startsWith("80")) d = d.slice(2);
-  else if (d.startsWith("0")) d = d.slice(1);
-  return d.slice(0, 9);
+/** Build a map: digit index → position AFTER that digit in the formatted string */
+function buildDigitPositions(formatted: string): number[] {
+  const positions: number[] = [];
+  // Skip fixed chars: +, 3, 8, space, (, 0 — first real digit is at index 6
+  let skippedFixed = 0; // skip "3", "8", "0"
+  for (let i = 0; i < formatted.length; i++) {
+    if (/\d/.test(formatted[i])) {
+      if (skippedFixed < 3) {
+        skippedFixed++;
+      } else {
+        positions.push(i + 1); // position AFTER this digit
+      }
+    }
+  }
+  return positions;
 }
 
-/** Map a cursor position in formatted string to the digit index it sits after */
-function cursorToDigitIndex(formatted: string, cursor: number): number {
-  let digitIndex = 0;
-  // Count subscriber digits before cursor
-  // First skip the "+38" prefix digits
-  let prefixDigitsToSkip = 2; // "3" and "8"
+/** Convert a cursor position in the formatted string to a digit index (0-based) */
+function cursorToDigitIdx(formatted: string, cursor: number): number {
+  let idx = 0;
+  let skippedFixed = 0;
   for (let i = 0; i < cursor && i < formatted.length; i++) {
     if (/\d/.test(formatted[i])) {
-      if (prefixDigitsToSkip > 0) {
-        prefixDigitsToSkip--;
+      if (skippedFixed < 3) {
+        skippedFixed++;
       } else {
-        digitIndex++;
+        idx++;
       }
     }
   }
-  return digitIndex;
+  return idx;
 }
 
-/** Map a digit index back to cursor position in formatted string */
-function digitIndexToCursor(formatted: string, targetDigitIndex: number): number {
-  let digitIndex = 0;
-  let prefixDigitsToSkip = 2; // "3" and "8"
-  for (let i = 0; i < formatted.length; i++) {
-    if (digitIndex >= targetDigitIndex) return i;
-    if (/\d/.test(formatted[i])) {
-      if (prefixDigitsToSkip > 0) {
-        prefixDigitsToSkip--;
-      } else {
-        digitIndex++;
-      }
-    }
-  }
-  return formatted.length;
-}
-
-function toE164(formatted: string): string {
-  const digits = formatted.replace(/\D/g, "");
-  if (digits.startsWith("380") && digits.length === 12) return "+" + digits;
+function toE164(digits: string): string {
+  if (digits.length === 9) return "+380" + digits;
   return "";
 }
 
 export default function ContactForm({ variant = "section" }: ContactFormProps) {
   const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
+  const [digits, setDigits] = useState(""); // subscriber digits only, max 9
   const [honeypot, setHoneypot] = useState("");
   const [loadTime] = useState(() => Date.now());
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -80,71 +72,126 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
   const phoneRef = useRef<HTMLInputElement>(null);
   const pendingCursor = useRef<number | null>(null);
 
-  // Restore cursor position after React re-renders the formatted value
+  const phoneDisplay = useMemo(() => formatSubscriber(digits), [digits]);
+
+  // Restore cursor after React re-renders
   useEffect(() => {
     if (pendingCursor.current !== null && phoneRef.current) {
       const pos = pendingCursor.current;
       phoneRef.current.setSelectionRange(pos, pos);
       pendingCursor.current = null;
     }
-  }, [phone]);
+  }, [phoneDisplay]);
 
-  const handlePhoneChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const input = e.target;
-    const rawValue = input.value;
-    const cursorPos = input.selectionStart ?? rawValue.length;
-
-    const newDigits = extractSubscriberDigits(rawValue);
-    const formatted = formatDigits(newDigits);
-
-    // Figure out where cursor should land in the new formatted string
-    const digitIdx = cursorToDigitIndex(rawValue, cursorPos);
-    const newCursorPos = digitIndexToCursor(formatted, digitIdx);
-
-    pendingCursor.current = newCursorPos;
-    setPhone(formatted);
-    if (fieldErrors.phone) setFieldErrors((p) => ({ ...p, phone: undefined }));
-  }, [fieldErrors.phone]);
+  const setCursorAfterDigit = useCallback((newDigits: string, digitIdx: number) => {
+    const formatted = formatSubscriber(newDigits);
+    const positions = buildDigitPositions(formatted);
+    if (digitIdx <= 0) {
+      // Before any subscriber digit — put cursor right after "(0"
+      pendingCursor.current = formatted.indexOf("(0") !== -1 ? formatted.indexOf("(0") + 2 : 0;
+    } else if (digitIdx > positions.length) {
+      pendingCursor.current = formatted.length;
+    } else {
+      pendingCursor.current = positions[digitIdx - 1];
+    }
+  }, []);
 
   const handlePhoneKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key !== "Backspace") return;
+    const input = e.currentTarget;
+    const cursor = input.selectionStart ?? 0;
+    const selEnd = input.selectionEnd ?? 0;
+    const formatted = phoneDisplay;
+
+    if (/^\d$/.test(e.key)) {
+      e.preventDefault();
+      if (digits.length >= 9) return;
+
+      const digitIdx = cursorToDigitIdx(formatted, cursor);
+      const newDigits = digits.slice(0, digitIdx) + e.key + digits.slice(digitIdx);
+      setCursorAfterDigit(newDigits, digitIdx + 1);
+      setDigits(newDigits);
+      if (fieldErrors.phone) setFieldErrors((p) => ({ ...p, phone: undefined }));
+      return;
+    }
+
+    if (e.key === "Backspace") {
+      e.preventDefault();
+      if (cursor !== selEnd) {
+        // Selection: delete all digits in range
+        const startIdx = cursorToDigitIdx(formatted, cursor);
+        const endIdx = cursorToDigitIdx(formatted, selEnd);
+        if (startIdx === endIdx) return;
+        const newDigits = digits.slice(0, startIdx) + digits.slice(endIdx);
+        setCursorAfterDigit(newDigits, startIdx);
+        setDigits(newDigits);
+      } else {
+        const digitIdx = cursorToDigitIdx(formatted, cursor);
+        if (digitIdx <= 0) return;
+        const newDigits = digits.slice(0, digitIdx - 1) + digits.slice(digitIdx);
+        setCursorAfterDigit(newDigits, digitIdx - 1);
+        setDigits(newDigits);
+      }
+      if (fieldErrors.phone) setFieldErrors((p) => ({ ...p, phone: undefined }));
+      return;
+    }
+
+    if (e.key === "Delete") {
+      e.preventDefault();
+      if (cursor !== selEnd) {
+        const startIdx = cursorToDigitIdx(formatted, cursor);
+        const endIdx = cursorToDigitIdx(formatted, selEnd);
+        if (startIdx === endIdx) return;
+        const newDigits = digits.slice(0, startIdx) + digits.slice(endIdx);
+        setCursorAfterDigit(newDigits, startIdx);
+        setDigits(newDigits);
+      } else {
+        const digitIdx = cursorToDigitIdx(formatted, cursor);
+        if (digitIdx >= digits.length) return;
+        const newDigits = digits.slice(0, digitIdx) + digits.slice(digitIdx + 1);
+        setCursorAfterDigit(newDigits, digitIdx);
+        setDigits(newDigits);
+      }
+      if (fieldErrors.phone) setFieldErrors((p) => ({ ...p, phone: undefined }));
+      return;
+    }
+
+    // Allow navigation keys, tab, etc.
+    if (["ArrowLeft", "ArrowRight", "Home", "End", "Tab"].includes(e.key)) return;
+
+    // Allow Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+    if (e.ctrlKey || e.metaKey) return;
+
+    // Block everything else
+    e.preventDefault();
+  }, [digits, phoneDisplay, fieldErrors.phone, setCursorAfterDigit]);
+
+  // Handle paste
+  const handlePhonePaste = useCallback((e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const pasted = e.clipboardData.getData("text");
+    const pastedDigits = pasted.replace(/\D/g, "");
+    let d = pastedDigits;
+    if (d.startsWith("380")) d = d.slice(3);
+    else if (d.startsWith("80")) d = d.slice(2);
+    else if (d.startsWith("0")) d = d.slice(1);
 
     const input = e.currentTarget;
     const cursor = input.selectionStart ?? 0;
     const selEnd = input.selectionEnd ?? 0;
+    const startIdx = cursorToDigitIdx(phoneDisplay, cursor);
+    const endIdx = cursorToDigitIdx(phoneDisplay, selEnd);
 
-    // If there's a selection, let default behavior handle it
-    if (cursor !== selEnd) return;
+    const before = digits.slice(0, startIdx);
+    const after = digits.slice(endIdx);
+    const newDigits = (before + d + after).slice(0, 9);
 
-    // Don't delete into the "+38 " prefix
-    if (cursor <= PHONE_PREFIX.length) {
-      e.preventDefault();
-      return;
-    }
+    setCursorAfterDigit(newDigits, Math.min(startIdx + d.length, newDigits.length));
+    setDigits(newDigits);
+    if (fieldErrors.phone) setFieldErrors((p) => ({ ...p, phone: undefined }));
+  }, [digits, phoneDisplay, fieldErrors.phone, setCursorAfterDigit]);
 
-    const currentFormatted = phone;
-    const charBeforeCursor = currentFormatted[cursor - 1];
-
-    // If the character before cursor is a formatting char (not a digit),
-    // we need to skip back to the previous digit and delete it
-    if (charBeforeCursor && !/\d/.test(charBeforeCursor)) {
-      e.preventDefault();
-
-      // Find the digit index that sits just before the cursor
-      const digitIdx = cursorToDigitIndex(currentFormatted, cursor);
-      if (digitIdx <= 0) return; // nothing to delete
-
-      // Remove that digit
-      const digits = extractSubscriberDigits(currentFormatted);
-      const newDigits = digits.slice(0, digitIdx - 1) + digits.slice(digitIdx);
-      const newFormatted = formatDigits(newDigits);
-
-      // Place cursor after the digit before the one we removed
-      const newCursorPos = digitIndexToCursor(newFormatted, digitIdx - 1);
-      pendingCursor.current = newCursorPos;
-      setPhone(newFormatted);
-    }
-  }, [phone]);
+  // onChange is a no-op — all input handled via onKeyDown/onPaste
+  const handlePhoneChange = useCallback(() => {}, []);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -172,7 +219,7 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
   function validate(): boolean {
     const errors: { name?: string; phone?: string } = {};
     if (!name.trim() || name.trim().length < 2) errors.name = "Введіть ваше ім'я";
-    const e164 = toE164(phone);
+    const e164 = toE164(digits);
     if (!e164) errors.phone = "Введіть коректний номер телефону";
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
@@ -185,7 +232,7 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
     if (Date.now() - loadTime < 2000) {
       setStatus("sent");
       setName("");
-      setPhone("");
+      setDigits("");
       return;
     }
 
@@ -200,7 +247,7 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: name.trim(),
-          phone: toE164(phone),
+          phone: toE164(digits),
           _hp: honeypot,
           _ts: loadTime,
         }),
@@ -209,7 +256,7 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
       if (res.ok) {
         setStatus("sent");
         setName("");
-        setPhone("");
+        setDigits("");
       } else {
         setStatus("error");
       }
@@ -318,9 +365,10 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
           ref={phoneRef}
           type="tel"
           placeholder="+38 (0XX) XXX-XX-XX"
-          value={phone}
+          value={phoneDisplay}
           onChange={handlePhoneChange}
           onKeyDown={handlePhoneKeyDown}
+          onPaste={handlePhonePaste}
           maxLength={19}
           required
           className={inputClasses}
