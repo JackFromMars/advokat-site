@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Phone, CheckCircle, ChevronDown } from "lucide-react";
@@ -77,6 +77,120 @@ function FAQAccordionItem({ q, a, index }: { q: string; a: string; index: number
         </div>
       </div>
     </div>
+  );
+}
+
+/* ── Service Timeline with scroll-driven line ── */
+function ServiceTimeline({
+  stages,
+  sectionRef,
+}: {
+  stages: { title: string; description: string }[];
+  sectionRef: React.RefObject<HTMLElement | null>;
+}) {
+  const timelineRef = useRef<HTMLDivElement>(null);
+  const [progress, setProgress] = useState(0);
+  const [activeSteps, setActiveSteps] = useState<boolean[]>(
+    stages.map(() => false)
+  );
+
+  const handleScroll = useCallback(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    const rect = section.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const scrolled = vh * 0.7 - rect.top;
+    const totalRange = rect.height - vh * 0.2;
+    const pct = Math.max(0, Math.min(1, scrolled / totalRange));
+    setProgress(pct);
+    setActiveSteps(stages.map((_, i) => pct >= (i + 0.3) / stages.length));
+  }, [sectionRef, stages]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+
+  return (
+    <section ref={sectionRef} className="section-glow py-20 md:py-28 lg:py-32">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+        <div className="text-center mb-14 md:mb-20">
+          <span className="eyebrow inline-block mb-4">Як це працює</span>
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-[var(--color-foreground)]">
+            Етапи <span className="gold-gradient">роботи</span>
+          </h2>
+        </div>
+
+        <div ref={timelineRef} className="relative max-w-3xl mx-auto">
+          <div
+            className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-[var(--color-border)]"
+            style={{ transform: "translateX(-50%)" }}
+          />
+          <div
+            className="absolute left-6 md:left-1/2 top-0 w-px origin-top"
+            style={{
+              height: `${progress * 100}%`,
+              background: "linear-gradient(to bottom, var(--color-accent), var(--color-accent-light))",
+              transform: "translateX(-50%)",
+              transition: "height 100ms linear",
+            }}
+          />
+
+          <div className="space-y-12 md:space-y-16">
+            {stages.map((stage, i) => {
+              const isActive = activeSteps[i];
+              const isEven = i % 2 === 0;
+              return (
+                <div key={stage.title} className="relative flex items-start md:items-center">
+                  <div
+                    className="absolute left-6 md:left-1/2 w-3 h-3 rounded-full border-2 z-10"
+                    style={{
+                      transform: "translate(-50%, 0)",
+                      borderColor: isActive ? "var(--color-accent)" : "var(--color-border)",
+                      backgroundColor: isActive ? "var(--color-accent)" : "var(--color-bg-deep)",
+                      boxShadow: isActive ? "0 0 12px rgba(201,168,76,0.4)" : "none",
+                      transition: "border-color 0.4s var(--ease-out), background-color 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out)",
+                    }}
+                  />
+                  <div
+                    className={`ml-14 md:ml-0 md:w-[calc(50%-2rem)] ${
+                      isEven ? "md:mr-auto md:text-right" : "md:ml-auto md:text-left"
+                    }`}
+                  >
+                    <div
+                      className="card p-5 md:p-6"
+                      style={{
+                        opacity: isActive ? 1 : 0.4,
+                        transform: isActive ? "translateY(0)" : "translateY(8px)",
+                        transition: "opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out)",
+                      }}
+                    >
+                      <div className={`flex items-center gap-3 mb-3 ${isEven ? "md:flex-row-reverse" : ""}`}>
+                        <div className="icon-container shrink-0">
+                          <span className="font-heading text-sm font-bold text-[var(--color-accent)]">
+                            {i + 1}
+                          </span>
+                        </div>
+                        <span className="text-xs font-semibold uppercase tracking-widest text-[var(--color-accent)]/60">
+                          Крок {i + 1}
+                        </span>
+                      </div>
+                      <h3 className="font-heading text-base md:text-lg font-semibold text-[var(--color-foreground)] mb-2">
+                        {stage.title}
+                      </h3>
+                      <p className="text-[var(--color-foreground-secondary)] text-sm leading-relaxed">
+                        {stage.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -286,45 +400,9 @@ export default function ServicePageContent({ service, reviews }: ServicePageCont
         </section>
       )}
 
-      {/* ═══════════ WORK STAGES ═══════════ */}
+      {/* ═══════════ WORK STAGES (Timeline) ═══════════ */}
       {service.workStages && service.workStages.length > 0 && (
-        <section ref={stagesRef} className="section-glow py-20 md:py-28 lg:py-32">
-          <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
-            <div className="text-center mb-12 md:mb-16">
-              <span className="reveal stagger-1 eyebrow inline-block mb-4">Як це працює</span>
-              <h2 className="reveal stagger-2 font-heading text-3xl md:text-4xl font-bold text-[var(--color-foreground)]">
-                Етапи <span className="gold-gradient">роботи</span>
-              </h2>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {service.workStages.map((stage, i) => (
-                <div
-                  key={stage.title}
-                  className={`reveal stagger-${Math.min(i + 1, 8)} card p-6 md:p-8 relative`}
-                >
-                  {/* Step number */}
-                  <div className="font-heading text-5xl font-bold text-[var(--color-accent)]/10 absolute top-4 right-5 select-none">
-                    {String(i + 1).padStart(2, "0")}
-                  </div>
-
-                  <div className="icon-container mb-5">
-                    <span className="font-heading text-sm font-bold text-[var(--color-accent)]">
-                      {i + 1}
-                    </span>
-                  </div>
-
-                  <h3 className="font-heading text-lg font-semibold text-[var(--color-foreground)] mb-3">
-                    {stage.title}
-                  </h3>
-                  <p className="text-[var(--color-foreground-secondary)] text-sm leading-relaxed">
-                    {stage.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <ServiceTimeline stages={service.workStages} sectionRef={stagesRef} />
       )}
 
       {/* ═══════════ FAQ ═══════════ */}
