@@ -1,66 +1,123 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { Phone } from "lucide-react";
 import { contacts } from "@/data/contacts";
 import ContactForm from "./ContactForm";
 
-const slideImages = ["/images/hero-1.png", "/images/hero-2.png", "/images/hero-3.png"];
+const slideImages = [
+  "/images/hero-1.png",
+  "/images/hero-2.png",
+  "/images/hero-3.png",
+];
 
 export default function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [mounted, setMounted] = useState(false);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  /* Auto-advance every 6s */
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slideImages.length);
-    }, 5000);
+    }, 6000);
     return () => clearInterval(interval);
   }, []);
 
+  const goToSlide = useCallback((index: number) => {
+    setCurrentSlide(index);
+  }, []);
+
+  /* Mount-based reveal helpers */
+  const reveal = (delay: number) =>
+    mounted
+      ? `opacity-100 translate-y-0 transition-all duration-[900ms] ease-[cubic-bezier(0.23,1,0.32,1)]`
+      : `opacity-0 translate-y-6`;
+
+  const revealStyle = (delay: number) =>
+    mounted ? { transitionDelay: `${delay}ms` } : {};
+
   return (
-    <section className="relative min-h-[85vh] sm:min-h-[90vh] flex items-center overflow-hidden">
-      {/* Background slides */}
+    <section
+      id="hero"
+      className="relative min-h-[100dvh] flex items-end overflow-hidden"
+    >
+      {/* ── Background image slides with ken-burns ── */}
       {slideImages.map((src, i) => (
         <div
-          key={i}
-          className="absolute inset-0 transition-opacity duration-1000"
-          style={{ opacity: currentSlide === i ? 1 : 0 }}
+          key={src}
+          className="absolute inset-0 transition-opacity duration-[1200ms]"
+          style={{
+            opacity: currentSlide === i ? 1 : 0,
+            transitionTimingFunction:
+              "cubic-bezier(0.77, 0, 0.175, 1)",
+          }}
         >
           <Image
             src={src}
             alt=""
             fill
-            className="object-cover"
+            className={`object-cover transition-transform duration-[6000ms] ease-linear ${
+              currentSlide === i ? "scale-110" : "scale-100"
+            }`}
             priority={i === 0}
             sizes="100vw"
           />
         </div>
       ))}
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/50" />
-      {/* Glow */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] bg-[var(--color-primary)] rounded-full opacity-[0.04] blur-[120px]" />
 
-      {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-          <div className="text-center lg:text-left">
-            <p className="text-amber-400 font-medium mb-4 text-sm uppercase tracking-wider">
+      {/* ── Heavy dark overlay ── */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-bg-deep)] via-black/70 to-black/50" />
+
+      {/* ── Decorative navy glow ── */}
+      <div
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] rounded-full opacity-[0.07] blur-[160px] pointer-events-none"
+        style={{ background: "radial-gradient(circle, #1e3a5f 0%, transparent 70%)" }}
+      />
+
+      {/* ── Content ── */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 pb-24 sm:pb-28 lg:pb-20 pt-32 sm:pt-40 lg:pt-32">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-end">
+          {/* ── Left column ── */}
+          <div className="lg:col-span-7 text-center lg:text-left space-y-7 sm:space-y-8">
+            {/* Eyebrow */}
+            <span
+              className={`eyebrow inline-block ${reveal(0)}`}
+              style={revealStyle(0)}
+            >
               Адвокат у Чернівцях з 2003 року
-            </p>
-            <h1 className="font-heading text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4 sm:mb-6">
-              Захищу ваші права{" "}
+            </span>
+
+            {/* H1 — massive serif */}
+            <h1
+              className={`font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.08] tracking-tight text-[var(--color-foreground)] ${reveal(120)}`}
+              style={revealStyle(120)}
+            >
+              Захищу ваші права
+              <br />
               <span className="gold-gradient">професійно</span> та{" "}
               <span className="gold-gradient">результативно</span>
             </h1>
-            <p className="text-base sm:text-lg text-slate-300 mb-6 sm:mb-8 leading-relaxed max-w-xl mx-auto lg:mx-0">
+
+            {/* Subtitle */}
+            <p
+              className={`text-lg text-[var(--color-foreground-secondary)] max-w-xl leading-relaxed mx-auto lg:mx-0 ${reveal(240)}`}
+              style={revealStyle(240)}
+            >
               Юридичні проблеми не чекають — і я теж. Від першої консультації до
               рішення суду на вашому боці. Понад 23 роки успішної практики.
             </p>
 
-            <div className="flex items-center justify-center lg:justify-start gap-4 mb-8">
-              <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-amber-400/30 shadow-[0_0_30px_rgba(212,168,67,0.1)]">
+            {/* Photo + name row */}
+            <div
+              className={`flex items-center justify-center lg:justify-start gap-4 ${reveal(360)}`}
+              style={revealStyle(360)}
+            >
+              <div className="relative w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-2 border-[var(--color-accent)]/40 shadow-[0_0_30px_rgba(201,168,76,0.15)] flex-shrink-0">
                 <Image
                   src="/images/photo.jpg"
                   alt={contacts.name}
@@ -70,36 +127,55 @@ export default function Hero() {
                 />
               </div>
               <div className="text-left">
-                <p className="text-white font-semibold">{contacts.name}</p>
-                <p className="text-slate-400 text-sm">Адвокат &bull; з 2003 року</p>
+                <p className="text-[var(--color-foreground)] font-semibold text-base">
+                  {contacts.name}
+                </p>
+                <p className="text-[var(--color-muted)] text-sm">
+                  Адвокат &bull; з 2003 року
+                </p>
               </div>
             </div>
 
-            <a
-              href={`tel:${contacts.phoneRaw}`}
-              className="lg:hidden cursor-pointer inline-flex items-center gap-2 py-3 px-6 bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold rounded-xl transition-colors duration-200 min-h-[44px]"
+            {/* Mobile CTA */}
+            <div
+              className={`lg:hidden ${reveal(480)}`}
+              style={revealStyle(480)}
             >
-              <Phone size={18} />
-              Зателефонувати
-            </a>
+              <a
+                href={`tel:${contacts.phoneRaw}`}
+                className="inline-flex w-full items-center justify-center gap-2.5 py-4 px-8 bg-[var(--color-accent)] hover:bg-[var(--color-accent-light)] text-[var(--color-bg-deep)] font-semibold rounded-xl transition-all duration-300 ease-[var(--ease-out)] active:scale-[0.97] min-h-[52px] text-base"
+              >
+                <Phone size={18} strokeWidth={2.5} />
+                Зателефонувати
+              </a>
+            </div>
           </div>
 
-          <div className="hidden lg:block">
-            <ContactForm variant="hero" />
+          {/* ── Right column — ContactForm (desktop only) ── */}
+          <div
+            className={`hidden lg:block lg:col-span-5 ${reveal(400)}`}
+            style={revealStyle(400)}
+          >
+            <div className="card-premium">
+              <div className="card-premium-inner">
+                <ContactForm variant="hero" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Dots */}
-      <div className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-10 flex gap-2">
+      {/* ── Pill dot indicators ── */}
+      <div className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2">
         {slideImages.map((_, i) => (
           <button
             key={i}
-            onClick={() => setCurrentSlide(i)}
-            className={`w-2.5 h-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full transition-all duration-300 cursor-pointer before:block before:rounded-full before:transition-all before:duration-300 ${
+            onClick={() => goToSlide(i)}
+            aria-label={`Slide ${i + 1}`}
+            className={`h-[3px] rounded-full transition-all duration-500 ease-[var(--ease-out)] cursor-pointer ${
               currentSlide === i
-                ? "before:bg-[var(--color-accent)] before:w-6 before:h-2.5"
-                : "before:bg-white/30 before:w-2.5 before:h-2.5"
+                ? "w-8 bg-[var(--color-accent)]"
+                : "w-4 bg-white/25 hover:bg-white/40"
             }`}
           />
         ))}
