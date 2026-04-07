@@ -4,6 +4,7 @@ export const navigation = {
     { label: "Послуги", href: "/#services" },
     { label: "Про адвоката", href: "/#about" },
     { label: "Відгуки", href: "/#reviews" },
+    { label: "FAQ", href: "/#faq" },
     { label: "Контакти", href: "/#contacts" },
   ],
   services: [

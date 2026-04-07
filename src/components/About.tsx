@@ -106,7 +106,7 @@ export default function About() {
               Принципи роботи:
             </h3>
 
-            <ul className="space-y-3">
+            <ul className="space-y-3 inline-block text-left">
               {principles.map((principle, i) => (
                 <li
                   key={principle}

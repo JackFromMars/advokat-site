@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Phone } from "lucide-react";
 import { navigation } from "@/data/navigation";
 import { contacts } from "@/data/contacts";
+import { TelegramIcon, ViberIcon, WhatsAppIcon } from "@/components/icons/MessengerIcons";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -201,7 +202,7 @@ export default function Header() {
           ))}
         </nav>
 
-        {/* Phone at bottom */}
+        {/* Messenger icons + Phone at bottom */}
         <div
           className="px-8 pb-10"
           style={{
@@ -210,6 +211,24 @@ export default function Header() {
             transition: `transform 0.5s var(--ease-out) ${isOpen ? navigation.main.length * 80 + 40 : 0}ms, opacity 0.4s var(--ease-out) ${isOpen ? navigation.main.length * 80 + 40 : 0}ms`,
           }}
         >
+          {/* Messenger icons */}
+          <div className="flex items-center justify-center gap-5 pt-4 mb-5">
+            <a href={contacts.messengers.telegram} target="_blank" rel="noopener noreferrer"
+               className="text-[var(--color-muted)] hover:text-[var(--color-accent)] transition-colors duration-300 cursor-pointer"
+               aria-label="Telegram">
+              <TelegramIcon size={22} />
+            </a>
+            <a href={contacts.messengers.viber} target="_blank" rel="noopener noreferrer"
+               className="text-[var(--color-muted)] hover:text-[var(--color-accent)] transition-colors duration-300 cursor-pointer"
+               aria-label="Viber">
+              <ViberIcon size={22} />
+            </a>
+            <a href={contacts.messengers.whatsapp} target="_blank" rel="noopener noreferrer"
+               className="text-[var(--color-muted)] hover:text-[var(--color-accent)] transition-colors duration-300 cursor-pointer"
+               aria-label="WhatsApp">
+              <WhatsAppIcon size={22} />
+            </a>
+          </div>
           <a
             href={`tel:${contacts.phoneRaw}`}
             className="inline-flex items-center gap-3 text-lg font-semibold text-[var(--color-accent)] cursor-pointer min-h-[44px] active:scale-[0.97]"
