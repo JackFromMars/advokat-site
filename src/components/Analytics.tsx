@@ -17,6 +17,7 @@ declare global {
 export default function Analytics() {
   const scrollTracked = useRef(false);
   const timeTracked = useRef(false);
+  const videoTracked = useRef(false);
 
   useEffect(() => {
     // ── Track tel: link clicks → TelClick ──
@@ -55,10 +56,50 @@ export default function Analytics() {
           event_label: href,
         });
       }
+
+      // Google Maps click
+      if (href.includes("maps.app.goo.gl") || href.includes("google.com/maps") || href.includes("goo.gl/maps")) {
+        window.gtag?.("event", "click_map", {
+          send_to: GA_ID,
+          event_category: "engagement",
+          event_label: href,
+        });
+      }
+
+      // CTA call button (distinguished from regular tel links by button text/class)
+      const buttonText = target.textContent?.trim() || "";
+      if (href.startsWith("tel:") && (buttonText.includes("консультац") || buttonText.includes("Консультац"))) {
+        window.gtag?.("event", "click_cta_call", {
+          send_to: GA_ID,
+          event_category: "conversion",
+          event_label: buttonText,
+        });
+      }
     }
 
     document.addEventListener("click", handleClick);
     return () => document.removeEventListener("click", handleClick);
+  }, []);
+
+  useEffect(() => {
+    // ── Track YouTube video play via iframe focus detection ──
+    function handleBlur() {
+      if (videoTracked.current) return;
+      setTimeout(() => {
+        const active = document.activeElement;
+        if (active && active.tagName === "IFRAME" && (active as HTMLIFrameElement).src?.includes("youtube")) {
+          videoTracked.current = true;
+          window.gtag?.("event", "video_play", {
+            send_to: GA_ID,
+            event_category: "engagement",
+            event_label: "interview",
+          });
+        }
+      }, 100);
+    }
+
+    window.addEventListener("blur", handleBlur);
+    return () => window.removeEventListener("blur", handleBlur);
   }, []);
 
   useEffect(() => {
