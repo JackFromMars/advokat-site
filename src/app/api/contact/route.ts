@@ -9,7 +9,7 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { name, phone, _hp, _ts } = body;
+    const { name, phone, message, page, _hp, _ts } = body;
 
     // Honeypot check — silent success for bots
     if (_hp) {
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Невірний номер телефону" }, { status: 400 });
     }
 
-    await sendToTelegram({ name, phone });
+    await sendToTelegram({ name, phone, message: message || "", page: page || "/" });
 
     return NextResponse.json({ success: true });
   } catch (error) {

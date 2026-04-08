@@ -65,6 +65,7 @@ function toE164(digits: string): string {
 export default function ContactForm({ variant = "section" }: ContactFormProps) {
   const [name, setName] = useState("");
   const [digits, setDigits] = useState(""); // user-typed digits, max 10 (e.g. 0508631248)
+  const [message, setMessage] = useState("");
   const [honeypot, setHoneypot] = useState("");
   const [loadTime] = useState(() => Date.now());
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -234,6 +235,7 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
       setStatus("sent");
       setName("");
       setDigits("");
+      setMessage("");
       return;
     }
 
@@ -249,6 +251,8 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
         body: JSON.stringify({
           name: name.trim(),
           phone: toE164(digits),
+          message: message.trim(),
+          page: typeof window !== "undefined" ? window.location.pathname : "/",
           _hp: honeypot,
           _ts: loadTime,
         }),
@@ -259,6 +263,7 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
         setStatus("sent");
         setName("");
         setDigits("");
+        setMessage("");
       } else {
         setStatus("error");
       }
@@ -380,6 +385,19 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
         {fieldErrors.phone && (
           <p className="text-red-400 text-xs mt-1.5 ml-1">{fieldErrors.phone}</p>
         )}
+      </div>
+
+      {/* Message field */}
+      <div>
+        <textarea
+          placeholder="Повідомлення (необов'язково)"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          rows={3}
+          maxLength={500}
+          className={inputClasses + " resize-none"}
+          style={inputTransition}
+        />
       </div>
 
       {/* Submit */}
