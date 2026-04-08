@@ -13,6 +13,7 @@ import ContactForm from "./ContactForm";
 import Reviews from "./Reviews";
 import Certificates from "./Certificates";
 import VideoInterview from "./VideoInterview";
+import Map from "./Map";
 import ServiceIcon from "@/components/icons/ServiceIcons";
 import AnimatedCounter from "./AnimatedCounter";
 
@@ -405,6 +406,12 @@ export default function ServicePageContent({ service, reviews }: ServicePageCont
       {/* ═══════════ VIDEO INTERVIEW ═══════════ */}
       <VideoInterview />
 
+      {/* ═══════════ CERTIFICATES ═══════════ */}
+      <Certificates />
+
+      {/* ═══════════ REVIEWS ═══════════ */}
+      <Reviews data={reviews ?? null} />
+
       {/* ═══════════ FAQ ═══════════ */}
       {service.faq.length > 0 && (
         <section ref={faqRef} className="py-20 md:py-28 lg:py-32">
@@ -424,12 +431,6 @@ export default function ServicePageContent({ service, reviews }: ServicePageCont
           </div>
         </section>
       )}
-
-      {/* ═══════════ CERTIFICATES ═══════════ */}
-      <Certificates />
-
-      {/* ═══════════ REVIEWS ═══════════ */}
-      <Reviews data={reviews ?? null} />
 
       {/* ═══════════ OTHER SERVICES ═══════════ */}
       <section ref={otherRef} className="py-16 md:py-20 lg:py-24 border-t border-[var(--color-border)]">
@@ -486,6 +487,9 @@ export default function ServicePageContent({ service, reviews }: ServicePageCont
           <ContactForm variant="section" />
         </div>
       </section>
+
+      {/* ═══════════ MAP ═══════════ */}
+      <Map />
     </>
   );
 }
