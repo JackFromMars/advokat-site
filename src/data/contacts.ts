@@ -7,7 +7,7 @@ export const contacts = {
   address: "м. Чернівці, вул. Небесної Сотні, 19",
   googleMapsUrl: "https://maps.app.goo.gl/zVuKYFgD8vzDxRFH9",
   googleMapsEmbed:
-    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2643.5!2d25.9353!3d48.2908!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z0LIu0J3QtdCx0LXRgdC90L7RlyDQodC-0YLQvdGWLCAxOQ!5e0!3m2!1suk!2sua!4v1",
+    "https://www.google.com/maps/embed/v1/place?key=AIzaSyBoQrWNEFbHuMEN0FpniqJk3BDull3L3C4&q=place_id:ChIJbYTlkMwPNEcRWuXS1vymzcE&language=uk",
   messengers: {
     viber: "viber://chat?number=%2B380953765446",
     telegram: "https://t.me/donetskband",
