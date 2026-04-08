@@ -292,6 +292,34 @@ export default function ServicePageContent({ service, reviews }: ServicePageCont
         </div>
       </section>
 
+      {/* ═══════════ SUB-SERVICES ═══════════ */}
+      <section ref={subServicesRef} className="section-glow py-20 md:py-28 lg:py-32">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+          <div className="text-center mb-12 md:mb-16">
+            <span className="reveal stagger-1 eyebrow inline-block mb-4">Напрямки</span>
+            <h2 className="reveal stagger-2 font-heading text-3xl md:text-4xl font-bold text-[var(--color-foreground)]">
+              Що входить у <span className="gold-gradient">{service.shortTitle.toLowerCase()}</span>
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            {service.subServices.map((sub, i) => (
+              <div
+                key={sub.title}
+                className={`reveal stagger-${Math.min(i + 1, 8)} card p-6 md:p-8`}
+              >
+                <h3 className="font-heading text-lg md:text-xl font-semibold text-[var(--color-foreground)] mb-3">
+                  {sub.title}
+                </h3>
+                <p className="text-[var(--color-foreground-secondary)] text-sm md:text-base leading-relaxed">
+                  {sub.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ═══════════ STATS ═══════════ */}
       {service.stats && service.stats.length > 0 && (
         <section ref={statsRef} className="py-16 md:py-20 lg:py-24">
@@ -327,34 +355,6 @@ export default function ServicePageContent({ service, reviews }: ServicePageCont
           </div>
         </section>
       )}
-
-      {/* ═══════════ SUB-SERVICES ═══════════ */}
-      <section ref={subServicesRef} className="section-glow py-20 md:py-28 lg:py-32">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
-          <div className="text-center mb-12 md:mb-16">
-            <span className="reveal stagger-1 eyebrow inline-block mb-4">Напрямки</span>
-            <h2 className="reveal stagger-2 font-heading text-3xl md:text-4xl font-bold text-[var(--color-foreground)]">
-              Що входить у <span className="gold-gradient">{service.shortTitle.toLowerCase()}</span>
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            {service.subServices.map((sub, i) => (
-              <div
-                key={sub.title}
-                className={`reveal stagger-${Math.min(i + 1, 8)} card p-6 md:p-8`}
-              >
-                <h3 className="font-heading text-lg md:text-xl font-semibold text-[var(--color-foreground)] mb-3">
-                  {sub.title}
-                </h3>
-                <p className="text-[var(--color-foreground-secondary)] text-sm md:text-base leading-relaxed">
-                  {sub.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ═══════════ ADVANTAGES ═══════════ */}
       {service.advantages && service.advantages.length > 0 && (

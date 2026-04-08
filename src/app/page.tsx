@@ -27,8 +27,8 @@ export default async function Home() {
         }}
       />
       <Hero />
-      <Stats />
       <ServicesGrid />
+      <Stats />
       <About />
       <VideoInterview />
       <WorkStages />
