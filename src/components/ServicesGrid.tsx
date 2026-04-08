@@ -66,19 +66,19 @@ export default function ServicesGrid() {
           </p>
         </div>
 
-        {/* Primary services — photo cards */}
+        {/* Primary services — photo cards, equal height */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 mb-16 md:mb-20">
           {primaryServices.map((service, index) => (
-            <div key={service.slug} className={`reveal stagger-${index + 1}`}>
+            <div key={service.slug} className={`reveal stagger-${index + 1} flex`}>
               <Link
                 href={`/${service.slug}`}
-                className="card-image group cursor-pointer block"
+                className="card-image group cursor-pointer flex flex-col"
               >
                 {/* Photo area */}
                 <div className="relative h-48 md:h-56 overflow-hidden">
                   <Image
                     src={imageMap[service.slug]}
-                    alt={service.title}
+                    alt={service.shortTitle}
                     fill
                     className="object-cover transition-transform duration-700"
                     style={{ transitionTimingFunction: "var(--ease-out)" }}
@@ -87,13 +87,13 @@ export default function ServicesGrid() {
                 </div>
 
                 {/* Content below photo */}
-                <div className="p-5 md:p-7">
+                <div className="p-5 md:p-7 flex flex-col flex-1">
                   <h3 className="font-heading text-xl md:text-2xl font-bold text-[var(--color-foreground)] mb-3 group-hover:text-[var(--color-accent)] transition-colors duration-300">
-                    {service.title}
+                    {service.shortTitle}
                   </h3>
 
-                  <p className="text-[var(--color-foreground-secondary)] text-sm leading-relaxed mb-4">
-                    {service.description}
+                  <p className="text-[var(--color-foreground-secondary)] text-sm leading-relaxed mb-4 flex-1">
+                    {service.subServices.slice(0, 4).map(s => s.title).join(", ").toLowerCase()}.
                   </p>
 
                   <ul className="space-y-1.5 mb-5">
@@ -108,7 +108,7 @@ export default function ServicesGrid() {
                     ))}
                   </ul>
 
-                  <span className="flex items-center gap-2 text-[var(--color-accent)] text-sm font-medium group-hover:gap-3 transition-all duration-300">
+                  <span className="flex items-center gap-2 text-[var(--color-accent)] text-sm font-medium group-hover:gap-3 transition-all duration-300 mt-auto">
                     Детальніше <ArrowRight size={14} />
                   </span>
                 </div>
