@@ -11,13 +11,15 @@ export async function sendToTelegram({ name, phone }: ContactMessage) {
     throw new Error("Telegram credentials not configured");
   }
 
+  const time = new Date().toLocaleString("uk-UA", { timeZone: "Europe/Kyiv" });
+
   const text = [
-    "📩 *Нова заявка з сайту*",
-    "",
-    `👤 *Ім'я:* ${escapeMarkdown(name)}`,
-    `📞 *Телефон:* ${escapeMarkdown(phone)}`,
-    "",
-    `🕐 *Час:* ${new Date().toLocaleString("uk-UA", { timeZone: "Europe/Kyiv" })}`,
+    `<b>Nova zaiavka z saitu</b>`,
+    ``,
+    `<b>Im'ia:</b> ${escapeHtml(name)}`,
+    `<b>Telefon:</b> ${escapeHtml(phone)}`,
+    ``,
+    `<b>Chas:</b> ${time}`,
   ].join("\n");
 
   const res = await fetch(
@@ -28,7 +30,7 @@ export async function sendToTelegram({ name, phone }: ContactMessage) {
       body: JSON.stringify({
         chat_id: chatId,
         text,
-        parse_mode: "MarkdownV2",
+        parse_mode: "HTML",
       }),
     }
   );
@@ -41,6 +43,6 @@ export async function sendToTelegram({ name, phone }: ContactMessage) {
   return res.json();
 }
 
-function escapeMarkdown(text: string): string {
-  return text.replace(/[_*[\]()~`>#+\-=|{}.!]/g, "\\$&");
+function escapeHtml(text: string): string {
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
