@@ -405,11 +405,6 @@ export default function ServicePageContent({ service, reviews }: ServicePageCont
       {/* ═══════════ VIDEO INTERVIEW ═══════════ */}
       <VideoInterview />
 
-      {/* ═══════════ WORK STAGES (Timeline) ═══════════ */}
-      {service.workStages && service.workStages.length > 0 && (
-        <ServiceTimeline stages={service.workStages} sectionRef={stagesRef} />
-      )}
-
       {/* ═══════════ FAQ ═══════════ */}
       {service.faq.length > 0 && (
         <section ref={faqRef} className="py-20 md:py-28 lg:py-32">
@@ -470,6 +465,11 @@ export default function ServicePageContent({ service, reviews }: ServicePageCont
           </div>
         </div>
       </section>
+
+      {/* ═══════════ WORK STAGES (Timeline) ═══════════ */}
+      {service.workStages && service.workStages.length > 0 && (
+        <ServiceTimeline stages={service.workStages} sectionRef={stagesRef} />
+      )}
 
       {/* ═══════════ CTA ═══════════ */}
       <section id="service-cta" ref={ctaRef} className="section-glow py-20 md:py-28 lg:py-32">

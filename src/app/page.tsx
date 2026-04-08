@@ -31,10 +31,10 @@ export default async function Home() {
       <Stats />
       <About />
       <VideoInterview />
-      <WorkStages />
       <Certificates />
       <Reviews data={reviews} />
       <FAQ items={generalFAQ} />
+      <WorkStages />
       <Map />
       <section id="contacts" className="section-glow py-20 md:py-28 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
