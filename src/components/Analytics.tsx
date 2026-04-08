@@ -5,7 +5,8 @@ import { useEffect, useRef } from "react";
 
 const GA_ID = "G-37YEXSP7NV";
 const ADS_ID = "AW-17101928703";
-const ADS_CONVERSION_LABEL = "Un4RCK6S_tEaEP_x6to_";
+const ADS_FORM_LABEL = "Un4RCK6S_tEaEP_x6to_";
+const ADS_TELCLICK_LABEL = "sSGSCM7EmpgcEP_x6to_";
 
 declare global {
   interface Window {
@@ -27,10 +28,17 @@ export default function Analytics() {
       const href = target.getAttribute("href") || "";
 
       if (href.startsWith("tel:")) {
+        // GA4 event
         window.gtag?.("event", "TelClick", {
           send_to: GA_ID,
           event_category: "engagement",
           event_label: href,
+        });
+        // Google Ads conversion
+        window.gtag?.("event", "conversion", {
+          send_to: `${ADS_ID}/${ADS_TELCLICK_LABEL}`,
+          value: 500,
+          currency: "UAH",
         });
       }
 
@@ -195,7 +203,7 @@ export function trackFormConversion(phone: string, name?: string) {
 
   // 3. Google Ads conversion with value matching Ads settings
   window.gtag?.("event", "conversion", {
-    send_to: `${ADS_ID}/${ADS_CONVERSION_LABEL}`,
+    send_to: `${ADS_ID}/${ADS_FORM_LABEL}`,
     value: 500,
     currency: "UAH",
   });
