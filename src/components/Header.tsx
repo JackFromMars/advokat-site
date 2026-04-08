@@ -337,7 +337,7 @@ export default function Header() {
 
         {/* Messenger icons + Phone at bottom */}
         <div
-          className="px-8 pb-10 shrink-0"
+          className="px-8 pb-20 shrink-0"
           style={{
             transform: isOpen ? "translateY(0)" : "translateY(20px)",
             opacity: isOpen ? 1 : 0,
