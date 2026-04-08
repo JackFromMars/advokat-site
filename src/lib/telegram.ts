@@ -14,12 +14,12 @@ export async function sendToTelegram({ name, phone }: ContactMessage) {
   const time = new Date().toLocaleString("uk-UA", { timeZone: "Europe/Kyiv" });
 
   const text = [
-    `<b>Nova zaiavka z saitu</b>`,
+    `📩 <b>Нова заявка з сайту</b>`,
     ``,
-    `<b>Im'ia:</b> ${escapeHtml(name)}`,
-    `<b>Telefon:</b> ${escapeHtml(phone)}`,
+    `👤 <b>Ім'я:</b> ${escapeHtml(name)}`,
+    `📞 <b>Телефон:</b> ${escapeHtml(phone)}`,
     ``,
-    `<b>Chas:</b> ${time}`,
+    `🕐 <b>Час:</b> ${time}`,
   ].join("\n");
 
   const res = await fetch(
