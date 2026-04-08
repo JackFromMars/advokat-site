@@ -2,6 +2,7 @@ import Hero from "@/components/Hero";
 import Stats from "@/components/Stats";
 import ServicesGrid from "@/components/ServicesGrid";
 import About from "@/components/About";
+import VideoInterview from "@/components/VideoInterview";
 import WorkStages from "@/components/WorkStages";
 import Certificates from "@/components/Certificates";
 import Reviews from "@/components/Reviews";
@@ -29,6 +30,7 @@ export default async function Home() {
       <Stats />
       <ServicesGrid />
       <About />
+      <VideoInterview />
       <WorkStages />
       <Certificates />
       <Reviews data={reviews} />

@@ -12,6 +12,7 @@ import Breadcrumbs from "./Breadcrumbs";
 import ContactForm from "./ContactForm";
 import Reviews from "./Reviews";
 import Certificates from "./Certificates";
+import VideoInterview from "./VideoInterview";
 import ServiceIcon from "@/components/icons/ServiceIcons";
 import AnimatedCounter from "./AnimatedCounter";
 
@@ -400,6 +401,9 @@ export default function ServicePageContent({ service, reviews }: ServicePageCont
           </div>
         </section>
       )}
+
+      {/* ═══════════ VIDEO INTERVIEW ═══════════ */}
+      <VideoInterview />
 
       {/* ═══════════ WORK STAGES (Timeline) ═══════════ */}
       {service.workStages && service.workStages.length > 0 && (
