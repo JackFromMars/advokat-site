@@ -93,7 +93,11 @@ export default function ServicesGrid() {
                   </h3>
 
                   <p className="text-[var(--color-foreground-secondary)] text-sm leading-relaxed mb-4 flex-1">
-                    {service.subServices.slice(0, 4).map(s => s.title).join(", ").toLowerCase()}.
+                    {service.description
+                      .replace(/\.?\s*Досвід понад 23 роки[^.]*\./gi, ".")
+                      .replace(/\.?\s*Адвокат Левченко[^.]*\./gi, ".")
+                      .replace(/\.\s*\./g, ".")
+                      .trim()}
                   </p>
 
                   <ul className="space-y-1.5 mb-5">
