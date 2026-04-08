@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ChatWidget from "@/components/ChatWidget";
 import ScrollToTop from "@/components/ScrollToTop";
+import Analytics from "@/components/Analytics";
 import { generateLocalBusinessSchema } from "@/lib/schema";
 
 const ebGaramond = EB_Garamond({
@@ -28,6 +29,9 @@ export const metadata: Metadata = {
   description:
     "Адвокат у Чернівцях з досвідом понад 23 роки. Сімейні справи, житлові суперечки, мобілізація. Професійний захист ваших інтересів.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://advokat.jackmars.com.ua"),
+  verification: {
+    google: "g6TlWdQlag6MD3nj322ncn7AdHeXCpa3xSbaKKLao9Y",
+  },
   openGraph: {
     type: "website",
     locale: "uk_UA",
@@ -55,6 +59,7 @@ export default function RootLayout({
         <Header />
         <main>{children}</main>
         <Footer />
+        <Analytics />
         <ScrollToTop />
         <ChatWidget />
       </body>

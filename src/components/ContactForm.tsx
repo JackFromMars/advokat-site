@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { Check } from "lucide-react";
+import { trackFormConversion } from "./Analytics";
 
 interface ContactFormProps {
   variant?: "hero" | "section";
@@ -254,6 +255,7 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
       });
 
       if (res.ok) {
+        trackFormConversion(toE164(digits));
         setStatus("sent");
         setName("");
         setDigits("");
