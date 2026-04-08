@@ -180,21 +180,23 @@ export default function Analytics() {
  * Call this when the contact form is successfully submitted.
  * Sends both GA4 event and Google Ads conversion.
  */
-export function trackFormConversion(phone: string) {
-  // GA4 event
+export function trackFormConversion(phone: string, name?: string) {
+  // 1. Set enhanced conversion user data BEFORE sending conversion
+  window.gtag?.("set", "user_data", {
+    phone_number: phone,
+  });
+
+  // 2. GA4 event
   window.gtag?.("event", "Form", {
     send_to: GA_ID,
     event_category: "conversion",
     event_label: "contact_form",
   });
 
-  // Google Ads conversion
+  // 3. Google Ads conversion with value matching Ads settings
   window.gtag?.("event", "conversion", {
     send_to: `${ADS_ID}/${ADS_CONVERSION_LABEL}`,
-  });
-
-  // Enhanced conversions — send hashed user data
-  window.gtag?.("set", "user_data", {
-    phone_number: phone,
+    value: 500,
+    currency: "UAH",
   });
 }

@@ -259,7 +259,7 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
       });
 
       if (res.ok) {
-        trackFormConversion(toE164(digits));
+        trackFormConversion(toE164(digits), name.trim());
         setStatus("sent");
         setName("");
         setDigits("");
