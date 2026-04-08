@@ -1,0 +1,15 @@
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "advokat-site.vercel.app"
+        }
+      ],
+      "destination": "https://advokat-profi.com.ua/:path*",
+      "permanent": true
+    }
+  ]
+}
