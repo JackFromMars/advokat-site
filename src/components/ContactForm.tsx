@@ -433,6 +433,14 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
         />
       </div>
 
+      {/* reCAPTCHA notice (required when badge is hidden) */}
+      <p className="text-[11px] leading-snug text-[var(--color-muted)] text-center">
+        Захищено reCAPTCHA.{" "}
+        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-[var(--color-accent)]">Конфіденційність</a>
+        {" · "}
+        <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-[var(--color-accent)]">Умови</a>
+      </p>
+
       {/* Submit */}
       <button
         type="submit"
