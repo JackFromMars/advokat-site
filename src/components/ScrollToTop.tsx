@@ -19,7 +19,7 @@ export default function ScrollToTop() {
     <button
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       aria-label="Нагору"
-      className="fixed left-4 bottom-4 z-30 w-11 h-11 rounded-full bg-[var(--color-bg-card)] border border-[var(--color-border)] flex items-center justify-center cursor-pointer hover:border-[var(--color-accent)]/40 hover:bg-[var(--color-bg-card-hover)] active:scale-[0.93]"
+      className="fixed left-4 bottom-20 z-30 w-11 h-11 rounded-full bg-[var(--color-bg-card)] border border-[var(--color-border)] flex items-center justify-center cursor-pointer hover:border-[var(--color-accent)]/40 hover:bg-[var(--color-bg-card-hover)] active:scale-[0.93]"
       style={{
         opacity: visible ? 1 : 0,
         pointerEvents: visible ? "auto" : "none",
