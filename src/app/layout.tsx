@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import ChatWidget from "@/components/ChatWidget";
 import ScrollToTop from "@/components/ScrollToTop";
 import Analytics from "@/components/Analytics";
+import Recaptcha from "@/components/Recaptcha";
 import { generateLocalBusinessSchema } from "@/lib/schema";
 
 const ebGaramond = EB_Garamond({
@@ -60,6 +61,7 @@ export default function RootLayout({
         <main>{children}</main>
         <Footer />
         <Analytics />
+        <Recaptcha />
         <ScrollToTop />
         <ChatWidget />
       </body>

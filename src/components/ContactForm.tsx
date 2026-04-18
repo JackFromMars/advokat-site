@@ -67,6 +67,7 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
   const [digits, setDigits] = useState(""); // user-typed digits, max 10 (e.g. 0508631248)
   const [message, setMessage] = useState("");
   const [honeypot, setHoneypot] = useState("");
+  const [honeypot2, setHoneypot2] = useState("");
   const [loadTime] = useState(() => Date.now());
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [fieldErrors, setFieldErrors] = useState<{ name?: string; phone?: string }>({});
@@ -230,8 +231,8 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    // Silent reject for bots that submit too fast
-    if (Date.now() - loadTime < 2000) {
+    // Silent reject for bots that submit too fast (5s min)
+    if (Date.now() - loadTime < 5000) {
       setStatus("sent");
       setName("");
       setDigits("");
@@ -244,6 +245,24 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
     setStatus("sending");
     setFieldErrors({});
 
+    // Get reCAPTCHA v3 token if configured
+    let recaptchaToken = "";
+    const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+    if (siteKey && typeof window !== "undefined") {
+      const grecaptcha = (window as unknown as { grecaptcha?: { ready: (cb: () => void) => void; execute: (key: string, opts: { action: string }) => Promise<string> } }).grecaptcha;
+      if (grecaptcha) {
+        try {
+          recaptchaToken = await new Promise<string>((resolve) => {
+            grecaptcha.ready(() => {
+              grecaptcha.execute(siteKey, { action: "contact_form" }).then(resolve).catch(() => resolve(""));
+            });
+          });
+        } catch {
+          recaptchaToken = "";
+        }
+      }
+    }
+
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -253,7 +272,9 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
           phone: toE164(digits),
           message: message.trim(),
           page: typeof window !== "undefined" ? window.location.pathname : "/",
+          recaptchaToken,
           _hp: honeypot,
+          _hp2: honeypot2,
           _ts: loadTime,
         }),
       });
@@ -335,7 +356,7 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
         </h3>
       )}
 
-      {/* Honeypot - hidden from humans */}
+      {/* Honeypot #1 — off-screen */}
       <div style={{ position: 'absolute', left: '-9999px', opacity: 0, height: 0, overflow: 'hidden' }} aria-hidden="true">
         <input
           type="text"
@@ -344,6 +365,18 @@ export default function ContactForm({ variant = "section" }: ContactFormProps) {
           autoComplete="off"
           value={honeypot}
           onChange={(e) => setHoneypot(e.target.value)}
+        />
+      </div>
+
+      {/* Honeypot #2 — CSS hidden, common field name bots target */}
+      <div style={{ display: 'none' }} aria-hidden="true">
+        <input
+          type="email"
+          name="email_confirm"
+          tabIndex={-1}
+          autoComplete="off"
+          value={honeypot2}
+          onChange={(e) => setHoneypot2(e.target.value)}
         />
       </div>
 
